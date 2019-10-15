@@ -2,6 +2,7 @@ package com.excilys.cdb.ui;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
@@ -22,39 +23,44 @@ public class CDB {
 		
 		while (choice != Actions.EXIT.getCode()) {
 			printMenu();
-			choice = scan.nextInt();
 			try {
-				switch(Actions.fromCode(choice)) {
-				case ADD_COMPUTER:
-					createComputer();
-					break;
-				case DELETE_COMPUTER:
-					deleteComputer();
-					break;
-				case UPDATE_COMPUTER:
-					updateComputer();
-					break;
-				case EXIT:
-					System.exit(0);
-					break;
-				case LIST_ALL_COMPANIES:
-					listAllCompanies();
-					break;
-				case LIST_ALL_COMPUTERS:
-					listAllComputers();
-					break;
-				case GET_COMPUTER_BY_ID:
-					getComputerById();
-					break;
-				case LIST_ALL_COMPUTERS_PAGE:
-					listAllComputersPaginated();
-					break;
-				default:
-					break;
-				
+				choice = scan.nextInt();
+				try {
+					switch(Actions.fromCode(choice)) {
+					case ADD_COMPUTER:
+						createComputer();
+						break;
+					case DELETE_COMPUTER:
+						deleteComputer();
+						break;
+					case UPDATE_COMPUTER:
+						updateComputer();
+						break;
+					case EXIT:
+						System.exit(0);
+						break;
+					case LIST_ALL_COMPANIES:
+						listAllCompanies();
+						break;
+					case LIST_ALL_COMPUTERS:
+						listAllComputers();
+						break;
+					case GET_COMPUTER_BY_ID:
+						getComputerById();
+						break;
+					case LIST_ALL_COMPUTERS_PAGE:
+						listAllComputersPaginated();
+						break;
+					default:
+						break;
+					
+					}
+				} catch (UnsupportedActionException e) {
+					System.out.println("Cette opération n'existe pas !");
 				}
-			} catch (UnsupportedActionException e) {
-				System.out.println("Cette opération n'existe pas !");
+			} catch (InputMismatchException e) {
+				System.out.println("Veuillez saisir un des chiffres ici présent !\n");
+				scan.nextLine();
 			}
 		}
 	}
@@ -191,7 +197,7 @@ public class CDB {
 		}
 	}
 	private static void listAllCompanies() {
-		companyService.get();
+		companyService.get().stream().forEach(System.out::println);
 	}
 
 }

@@ -72,6 +72,9 @@ public class ComputerDAO {
 		try (Statement stmt = DBConnection.getConnection().createStatement()) {
 			ResultSet resultSet = stmt.executeQuery(SELECT_ALL + " LIMIT " + page.getFirstLimit() + "," + page.getOffset());
 			
+			List<Computer> newElements = new ArrayList<>();
+			page.setElements(newElements);
+			
 			while (resultSet.next()) {
 				
 				page.getElements().add(computerMapper.fromResultSet(resultSet));

@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 public class DBConnection {
 	
-	private static final String jdbcUrl = "jdbc:mysql://localhost:3307/"
+	private static final String jdbcUrl = "jdbc:mysql://localhost:3306/"
 	          + "computer-database-db?"
 	          + "useUnicode=true"
 	          + "&useJDBCCompliantTimezoneShift=true"
