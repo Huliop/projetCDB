@@ -21,7 +21,6 @@ public class ComputerDAO {
 	private final ComputerMapper computerMapper;
 	
 	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-	private final String SELECT_ALL_PAGE = SELECT_ALL + " LIMIT ?, ?";
 	private final String SELECT_BY_ID = SELECT_ALL + " WHERE computer.id = ?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private final String DELETE = "DELETE FROM computer WHERE id = ?";

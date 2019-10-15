@@ -1,8 +1,6 @@
 package com.excilys.cdb.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.model.Computer;

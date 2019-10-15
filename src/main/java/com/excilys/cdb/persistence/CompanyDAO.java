@@ -11,7 +11,6 @@ import java.util.Optional;
 import com.excilys.cdb.connection.DBConnection;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 
 public class CompanyDAO {
 	
