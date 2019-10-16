@@ -2,11 +2,12 @@ package com.excilys.cdb.connection;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import java.sql.Connection;
 
 public class DBConnection {
 	
-	private static final String jdbcUrl = "jdbc:mysql://localhost:3306/"
+	private static String jdbcUrl = "jdbc:mysql://localhost:3306/"
 	          + "computer-database-db?"
 	          + "useUnicode=true"
 	          + "&useJDBCCompliantTimezoneShift=true"
@@ -16,6 +17,18 @@ public class DBConnection {
 	private static final String username = "admincdb";
 	private static final String password = "qwerty1234";
 	
+	public static DBConnection instance;
+	
+	private DBConnection() {}
+	
+	public static DBConnection getInstance() {
+		if (instance == null) {
+			instance = new DBConnection();
+		}
+		
+		return instance;
+	}
+	
 	public static Connection getConnection() {
 		try {;
 			return DriverManager.getConnection(jdbcUrl, username, password);
@@ -24,6 +37,14 @@ public class DBConnection {
 			System.exit(0);
 		}
 		return null;
+	}
+	
+	public void changeURLToTest() {
+		jdbcUrl = "jdbc:h2:mem:mydb;INIT=RUNSCRIPT FROM '~/Téléchargements/cdb-sprint-1/src/test/resources/init_mydb.sql'";
+	}
+	
+	public String getJdbc() {
+		return jdbcUrl;
 	}
 
 }
