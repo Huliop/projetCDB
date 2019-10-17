@@ -3,47 +3,46 @@ package com.excilys.cdb.model;
 public class Company {
 	private Integer id;
 	private String name;
-	
+
 	private Company() {
 	}
 
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public static class CompanyBuilder {
 		private Integer id;
 		private String name;
-		
+
 		public CompanyBuilder withId(Integer id) {
 			this.id = id;
 			return this;
 		}
-		
+
 		public CompanyBuilder withName(String name) {
 			this.name = name;
 			return this;
 		}
-		
+
 		public Company build() {
 			Company company = new Company();
 			company.id = this.id;
 			company.name = this.name;
 			return company;
 		}
-		
 	}
 
 	@Override
@@ -62,26 +61,30 @@ public class Company {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Company other = (Company) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
-	
-	
-
 }

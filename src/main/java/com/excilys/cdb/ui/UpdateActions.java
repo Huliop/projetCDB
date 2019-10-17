@@ -8,28 +8,29 @@ public enum UpdateActions {
 	INTRODUCED(2, "Introduced"),
 	DISCONTINUED(3, "Discontinued"),
 	COMPANY(4, "Company");
-	
-	private int code;
-	private String message;
-	
-	private UpdateActions(int code, String message) {
-		this.code = code;
-		this.message = message;
+
+	private int myCode;
+	private String myMessage;
+
+	UpdateActions(final int code, final String message) {
+		this.myCode = code;
+		this.myMessage = message;
 	}
 
 	public int getCode() {
-		return code;
+		return myCode;
 	}
 
 	public String getMessage() {
-		return message;
+		return myMessage;
 	}
-	
+
 	public static List<UpdateActions> asList() {
 		return Arrays.asList(values());
 	}
-	
-	public static UpdateActions fromCode(int code) throws UnsupportedActionException {
+
+	public static UpdateActions fromCode(final int code)
+			throws UnsupportedActionException {
 		switch (code) {
 		case 1: return NAME;
 		case 2: return INTRODUCED;

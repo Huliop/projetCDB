@@ -7,18 +7,18 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerMapper {
-	
+
 	private static ComputerMapper instance;
 
-	private ComputerMapper() {}
-	
+	private ComputerMapper() { }
+
 	public static ComputerMapper getInstance() {
 		if (instance == null) {
 			instance = new ComputerMapper();
 		}
 		return instance;
 	}
-	
+
 	public Computer fromResultSet(ResultSet resultSet) throws SQLException {
 		return new Computer.ComputerBuilder().withId(resultSet.getInt(1))
 				.withName(resultSet.getString(2))
@@ -30,7 +30,4 @@ public class ComputerMapper {
 										.build())
 				.build();
 	}
-	
-	
-
 }

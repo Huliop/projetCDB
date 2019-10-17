@@ -8,18 +8,18 @@ public class Computer {
 	private LocalDate introduced;
 	private LocalDate discontinued;
 	private Company company;
-	
+
 	private Computer() {
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -31,59 +31,59 @@ public class Computer {
 	public LocalDate getIntroduced() {
 		return introduced;
 	}
-	
+
 	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
-	
+
 	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-	
+
 	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
-	
+
 	public Company getCompany() {
 		return company;
 	}
-	
+
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
+
 	public static class ComputerBuilder {
 		private Integer id;
 		private String name;
 		private LocalDate introduced;
 		private LocalDate discontinued;
 		private Company company;
-		
+
 		public ComputerBuilder withId(Integer id) {
 			this.id = id;
 			return this;
 		}
-		
+
 		public ComputerBuilder withName(String name) {
 			this.name = name;
 			return this;
 		}
-		
+
 		public ComputerBuilder withIntroduced(LocalDate introduced) {
 			this.introduced = introduced;
 			return this;
 		}
-		
+
 		public ComputerBuilder withDiscontinued(LocalDate discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
-		
+
 		public ComputerBuilder withCompany(Company company) {
 			this.company = company;
 			return this;
 		}
-		
+
 		public Computer build() {
 			Computer computer = new Computer();
 			computer.id = this.id;
@@ -93,7 +93,6 @@ public class Computer {
 			computer.company = this.company;
 			return computer;
 		}
-		
 	}
 
 	@Override
@@ -116,41 +115,51 @@ public class Computer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Computer other = (Computer) obj;
 		if (company == null) {
-			if (other.company != null)
+			if (other.company != null) {
 				return false;
-		} else if (!company.equals(other.company))
+			}
+		} else if (!company.equals(other.company)) {
 			return false;
+		}
 		if (discontinued == null) {
-			if (other.discontinued != null)
+			if (other.discontinued != null) {
 				return false;
-		} else if (!discontinued.equals(other.discontinued))
+			}
+		} else if (!discontinued.equals(other.discontinued)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (introduced == null) {
-			if (other.introduced != null)
+			if (other.introduced != null) {
 				return false;
-		} else if (!introduced.equals(other.introduced))
+			}
+		} else if (!introduced.equals(other.introduced)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
-	
-	
-
 }

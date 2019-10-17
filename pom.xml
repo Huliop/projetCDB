@@ -34,6 +34,7 @@
     	<scope>test</scope>
 	</dependency>
   </dependencies>
+  
 
   <build>
     <plugins>
@@ -51,6 +52,22 @@
           <warSourceDirectory>WebContent</warSourceDirectory>
         </configuration>
       </plugin>
+      <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-checkstyle-plugin</artifactId>
+           <version>3.0.0</version>
+           <configuration>
+             <configLocation>checkstyle.xml</configLocation>
+             <suppressionsLocation>suppressions.xml</suppressionsLocation>
+           </configuration>
+           <executions>
+             <execution>
+               <goals>
+                 <goal>check</goal>
+               </goals>
+             </execution>
+           </executions>
+  		</plugin>
     </plugins>
   </build>
 </project>

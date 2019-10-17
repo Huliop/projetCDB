@@ -20,13 +20,13 @@ public class CDB {
 	public static void main(String[] args) {
 
 		int choice = 0;
-		
+
 		while (choice != Actions.EXIT.getCode()) {
 			printMenu();
 			try {
 				choice = scan.nextInt();
 				try {
-					switch(Actions.fromCode(choice)) {
+					switch (Actions.fromCode(choice)) {
 					case ADD_COMPUTER:
 						createComputer();
 						break;
@@ -53,7 +53,6 @@ public class CDB {
 						break;
 					default:
 						break;
-					
 					}
 				} catch (UnsupportedActionException e) {
 					System.out.println("Cette opération n'existe pas !");
@@ -64,36 +63,36 @@ public class CDB {
 			}
 		}
 	}
-	
+
 	private static void printMenu() {
 		System.out.println("Bienvenue sur CDB !");
 		System.out.println("Veuillez faire votre choix dans ce menu :");
-		
+
 		Actions.asList().stream().forEach(action -> {
 			System.out.println(action.getCode() + " - " + action.getMessage());
 		});
 	}
-	
+
 	private static void createComputer() {
-		Computer newComputer = new Computer.ComputerBuilder().build(); 
+		Computer newComputer = new Computer.ComputerBuilder().build();
 		for (Field field : Computer.class.getDeclaredFields()) {
 			System.out.println("Veuillez saisir le " + field.getName() + " du computer");
 			switch (field.getName()) {
-				case "id" :
+				case "id":
 					break;
-				case "name" : 
+				case "name":
 					newComputer.setName(scan.next());
 					break;
-				case "introduced" : 
+				case "introduced":
 					newComputer.setIntroduced(LocalDate.parse(scan.next()));
 					break;
-				case "discontinued" : 
+				case "discontinued":
 					newComputer.setDiscontinued(LocalDate.parse(scan.next()));
 					break;
-				case "company" :
+				case "company":
 					newComputer.setCompany(new Company.CompanyBuilder().withId(scan.nextInt()).build());
 					break;
-				default :
+				default:
 					System.out.println("Attribut inconnu : " + field.getName());
 					break;
 			}
@@ -101,12 +100,12 @@ public class CDB {
 		computerService.create(newComputer);
 		System.out.println("Ordinateur créé ! " + newComputer.getId());
 	}
-	
+
 	private static void deleteComputer() {
 		System.out.print("Saisir l'id de l'ordinateur à supprimer : ");
 		computerService.delete(scan.nextInt());
 	}
-	
+
 	private static void updateComputer() {
 		System.out.print("Saisir l'id de l'ordinateur à modifier : ");
 		Computer computerToUpdate = new Computer.ComputerBuilder().build();
@@ -116,16 +115,16 @@ public class CDB {
 			System.out.println("Cet ordinateur n'existe pas");
 		}
 		boolean otherFieldToUpdate = true;
-		
+
 		while (otherFieldToUpdate) {
 			System.out.println("Quel champs souhaitez vous modifier ?");
 			UpdateActions.asList().stream().forEach(action -> {
 				System.out.println(action.getCode() + " - " + action.getMessage());
 			});
-			
+
 			int fieldToUpdate = scan.nextInt();
 			updateField(computerToUpdate, fieldToUpdate);
-			
+
 			System.out.println("Souhaitez-vous modifier un autre champs ? (y/n)");
 			otherFieldToUpdate = scan.next().equals("y") ? true : false;
 		}
@@ -159,11 +158,11 @@ public class CDB {
 		System.out.println("Ancienne valeur : " + field);
 		System.out.print("Saisir la nouvelle valeur : ");
 	}
-	
+
 	private static void listAllComputers() {
 		computerService.get().stream().forEach(System.out::println);
 	}
-	
+
 	private static void getComputerById() {
 		System.out.print("Merci de saisir l'id que vous souhaitez rechercher : ");
 		int id = scan.nextInt();
@@ -173,17 +172,19 @@ public class CDB {
 			System.out.println("Computer " + id + " not found !");
 		}
 	}
-	private static void listAllComputersPaginated() throws UnsupportedActionException {
+
+	private static void listAllComputersPaginated()
+			throws UnsupportedActionException {
 		Page<Computer> page = new Page<Computer>();
 		boolean nextAction = true;
-		
+
 		while (nextAction) {
 			computerService.get(page);
 			page.getElements().stream().forEach(System.out::println);
 			System.out.println("Que souhaitez-vous faire ? (p : précédent, s : suivant, q : quitter");
 			String answer = scan.next();
 			switch (answer) {
-				case "p": 
+				case "p":
 					page.setCurrentPage(page.getCurrentPage() - 1);
 					break;
 				case "s":
@@ -196,8 +197,8 @@ public class CDB {
 			}
 		}
 	}
+
 	private static void listAllCompanies() {
 		companyService.get().stream().forEach(System.out::println);
 	}
-
 }

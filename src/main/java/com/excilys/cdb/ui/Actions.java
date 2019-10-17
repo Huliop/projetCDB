@@ -12,28 +12,29 @@ public enum Actions {
 	GET_COMPUTER_BY_ID(6, "Récupérer un ordinateur par son ID"),
 	LIST_ALL_COMPUTERS_PAGE(8, "Lister tous les ordinateurs paginés"),
 	EXIT(7, "Quitter");
-	
-	private int code;
-	private String message;
-	
-	private Actions(int code, String message) {
-		this.code = code;
-		this.message = message;
+
+	private int myCode;
+	private String myMessage;
+
+	Actions(final int code, final String message) {
+		this.myCode = code;
+		this.myMessage = message;
 	}
 
 	public int getCode() {
-		return code;
+		return myCode;
 	}
 
 	public String getMessage() {
-		return message;
+		return myMessage;
 	}
-	
+
 	public static List<Actions> asList() {
 		return Arrays.asList(values());
 	}
-	
-	public static Actions fromCode(int code) throws UnsupportedActionException {
+
+	public static Actions fromCode(final int code)
+			throws UnsupportedActionException {
 		switch (code) {
 		case 1: return LIST_ALL_COMPUTERS;
 		case 2: return LIST_ALL_COMPANIES;
