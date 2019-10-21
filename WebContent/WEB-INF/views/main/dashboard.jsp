@@ -1,13 +1,16 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false"%>
+
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../resources/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../resources/css/main.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,7 +22,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+                ${ nbComputers } Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -47,7 +50,6 @@
                     <tr>
                         <!-- Variable declarations for passing labels as parameters -->
                         <!-- Table header for Computer Name -->
-
                         <th class="editMode" style="width: 60px; height: 22px;">
                             <input type="checkbox" id="selectall" /> 
                             <span style="vertical-align: top;">
@@ -56,170 +58,23 @@
                                     </a>
                             </span>
                         </th>
-                        <th>
-                            Computer name
-                        </th>
-                        <th>
-                            Introduced date
-                        </th>
-                        <!-- Table header for Discontinued Date -->
-                        <th>
-                            Discontinued date
-                        </th>
-                        <!-- Table header for Company -->
-                        <th>
-                            Company
-                        </th>
-
+                        <th>Computer name</th>
+                        <th>Introduced date</th>
+                        <th>Discontinued date</th>
+                        <th>Company</th>
                     </tr>
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">MacBook Pro</a>
-                        </td>
-                        <td>2006-01-10</td>
-                        <td></td>
-                        <td>Apple Inc.</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Connection Machine</a>
-                        </td>
-                        <td>1987-01-01</td>
-                        <td></td>
-                        <td>Thinking Machines</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">PowerBook</a>
-                        </td>
-                        <td>1991-01-01</td>
-                        <td>2006-01-01</td>
-                        <td>Apple Inc.</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Commodore 64</a>
-                        </td>
-                        <td>1982-08-01</td>
-                        <td>1994-01-01</td>
-                        <td>Commodore International</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Altair 8800</a>
-                        </td>
-                        <td>1974-12-19</td>
-                        <td></td>
-                        <td>Micro Instrumentation and Telemetry Systems</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Canon Cat</a>
-                        </td>
-                        <td>1987-01-01</td>
-                        <td></td>
-                        <td>Canon</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Nokia 770</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td>Nokia</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">NeXTcube</a>
-                        </td>
-                        <td>1988-01-01</td>
-                        <td>1993-01-01</td>
-                        <td>NeXT</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">IBM 650</a>
-                        </td>
-                        <td>1953-01-01</td>
-                        <td>1962-01-01</td>
-                        <td>IBM</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">PlayStation 2</a>
-                        </td>
-                        <td>2000-03-24</td>
-                        <td></td>
-                        <td>Sony</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Archos 101</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Nintendo 3DS</a>
-                        </td>
-                        <td>2010-03-23</td>
-                        <td></td>
-                        <td>Nintendo</td>
-
-                    </tr>
-                    
+                    <c:forEach var="computer" items="${ requestScope.computers }">
+                        <tr>
+                            <td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
+                            <td><a href="editComputer.jsp" onclick=""><c:out value="${ computer.name }" /></a></td>
+                            <td><c:out value="${ computer.introduced }" /></td>
+                            <td><c:out value="${ computer.discontinued }" /></td>
+                            <td><c:out value="${ computer.company.name }" /></td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
@@ -228,34 +83,71 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
+			     <li>
+				   <a href="#" aria-label="Previous">
+				       <span aria-hidden="true">&laquo;</span>
+				      </a>
+			     </li>
+                 <li>
+	                <a href="   <c:url value="/index">
+	                                <c:param name="nbPage" value="1"/>
+	                            </c:url>">1
+	                </a>
+                 </li>
+                 <li>
+                    <a href="   <c:url value="/index">
+                                    <c:param name="nbPage" value="2"/>
+                                </c:url>">2
+                    </a>
+                 </li>
+                 <li>
+                    <a href="   <c:url value="/index">
+                                    <c:param name="nbPage" value="3"/>
+                                </c:url>">3
+                    </a>
+                 </li>
+                 <li>
+                    <a href="   <c:url value="/index">
+                                    <c:param name="nbPage" value="4"/>
+                                </c:url>">4
+                    </a>
+                 </li>
+                 <li>
+                    <a href="   <c:url value="/index">
+                                    <c:param name="nbPage" value="5"/>
+                                </c:url>">5
+                    </a>
+                 </li>
                 <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
-              </li>
+                </li>
            </ul>
-        </div>
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <a href="   <c:url value="/index">
+                            <c:param name="offset" value="10"/>
+                        </c:url>">
+                        <button type="button" class="btn btn-default">10</button>
+            </a>
+            <a href="   <c:url value="/index">
+                            <c:param name="offset" value="50"/>
+                        </c:url>">
+                        <button type="button" class="btn btn-default">50</button>
+            </a>
+            <a href="   <c:url value="/index">
+                            <c:param name="offset" value="100"/>
+                        </c:url>">
+                        <button type="button" class="btn btn-default">100</button>
+            </a>
+        </div>
         </div>
 
     </footer>
-<script src="../resources/js/jquery.min.js"></script>
-<script src="../resources/js/bootstrap.min.js"></script>
-<script src="../resources/js/dashboard.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>
