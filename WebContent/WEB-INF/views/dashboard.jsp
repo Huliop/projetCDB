@@ -34,7 +34,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="<c:url value='/addComputer' />">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -83,44 +83,28 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-			     <li>
-				   <a href="#" aria-label="Previous">
-				       <span aria-hidden="true">&laquo;</span>
-				      </a>
-			     </li>
-                 <li>
-	                <a href="   <c:url value="/index">
-	                                <c:param name="nbPage" value="1"/>
-	                            </c:url>">1
-	                </a>
-                 </li>
-                 <li>
-                    <a href="   <c:url value="/index">
-                                    <c:param name="nbPage" value="2"/>
-                                </c:url>">2
-                    </a>
-                 </li>
-                 <li>
-                    <a href="   <c:url value="/index">
-                                    <c:param name="nbPage" value="3"/>
-                                </c:url>">3
-                    </a>
-                 </li>
-                 <li>
-                    <a href="   <c:url value="/index">
-                                    <c:param name="nbPage" value="4"/>
-                                </c:url>">4
-                    </a>
-                 </li>
-                 <li>
-                    <a href="   <c:url value="/index">
-                                    <c:param name="nbPage" value="5"/>
-                                </c:url>">5
-                    </a>
-                 </li>
                 <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                   <a href="<c:url value='/index'>
+                                <c:param name="numPage" value="0"/>
+                            </c:url>" aria-label="Previous">
+                       <span aria-hidden="true">&laquo;</span>
+                      </a>
+                 </li>
+                <c:forEach var="number" items="${ requestScope.navFooter }">
+                        <li>
+                            <a href="   <c:url value="/index">
+                                            <c:if test="${ number != '...'}">
+                                                <c:param name="numPage" value="${ number }"/>
+                                            </c:if> 
+                                        </c:url>">${ number }
+                            </a>
+                        </li>
+                </c:forEach>
+                <li>
+                <a href="<c:url value='/index'>
+                              <c:param name="numPage" value='${ requestScope.nbPages + 1 }'/>
+                         </c:url>" aria-label="Next">
+                         <span aria-hidden="true">&raquo;</span>
                 </a>
                 </li>
            </ul>

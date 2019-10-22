@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false"%>
+
 <html>
 <head>
 <title>Computer Database</title>
@@ -44,7 +47,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="<c:url value='/index' />" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
