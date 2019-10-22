@@ -86,12 +86,13 @@ public class ComputerDAO {
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
+            	System.out.println("HERE");
                 computer.setId(rs.getInt(1));
             }
+            System.out.println("CREATED");
 		} catch (SQLException e) {
 			System.out.println("Error creating computer : " + e.getMessage());
 		}
-		System.out.println(instance.get(-1));
 	}
 
 	public void update(Computer computer) {
@@ -118,12 +119,18 @@ public class ComputerDAO {
 		stmt.setString(1, computer.getName());
 		if (computer.getIntroduced() != null) {
 			stmt.setDate(2, Date.valueOf(computer.getIntroduced()));
+		} else {
+			stmt.setDate(2,  null);
 		}
 		if (computer.getDiscontinued() != null) {
 			stmt.setDate(3, Date.valueOf(computer.getDiscontinued()));
+		} else {
+			stmt.setDate(3,  null);
 		}
 		if (computer.getCompany() != null) {
 			stmt.setInt(4, computer.getCompany().getId());
+		} else {
+			stmt.setDate(4,  null);
 		}
 	}
 }

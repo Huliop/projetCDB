@@ -17,6 +17,25 @@
             <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
         </div>
     </header>
+    
+    <c:if test="${ success == true }">
+	    <section id="main">
+	        <div class="container">
+	            <div class="alert alert-success">
+	                The computer has been created!
+	            </div>
+	        </div>
+	    </section>
+    </c:if>
+    <c:if test="${ !empty errors }">
+        <section id="main">
+            <div class="container">
+                <div class="alert alert-success">
+                    The computer has been created!
+                </div>
+            </div>
+        </section>
+    </c:if> 
 
     <section id="main">
         <div class="container">
@@ -27,20 +46,22 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Ex : PC de Schwarzeneger">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introducedDate" placeholder="Ex : 2001-11-23">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinuedDate" placeholder="Doit être posterieure à celle d'au dessus">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
+                                <select class="form-control" id="companyId" name="company">
+                                    <c:forEach var="comp" items="${ requestScope.companies }">
+                                        <option value="${ comp.id }">${ comp.name }</option>
+                                    </c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>

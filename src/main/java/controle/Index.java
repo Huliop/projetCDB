@@ -20,7 +20,9 @@ import com.excilys.cdb.service.ComputerService;
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L; 
-	final ComputerService computerService;
+	public static final String VUE = "/WEB-INF/views/dashboard.jsp";
+	public static final String ERROR500 = "/WEB-INF/views/500.jsp";
+	private ComputerService computerService;
 	private Integer nbComputers;
 	private Integer nbPages;
 	Page<Computer> myPage = new Page<Computer>();
@@ -28,14 +30,13 @@ public class Index extends HttpServlet {
     public Index() {
     	super();
     	computerService = ComputerService.getInstance();
-    	nbComputers = computerService.get().size();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		nbComputers = computerService.get().size();
 		
 		if (request.getParameter("numPage") != null) {
 			try {
@@ -53,7 +54,7 @@ public class Index extends HttpServlet {
 					myPage.setCurrentPage(0);
 				}
 			} catch (NumberFormatException e) {
-				this.getServletContext().getRequestDispatcher( "/WEB-INF/views/500.jsp" ).forward( request, response );
+				this.getServletContext().getRequestDispatcher( ERROR500 ).forward( request, response );
 			}
 		}
 		
@@ -66,7 +67,7 @@ public class Index extends HttpServlet {
 				myPage.setCurrentPage((int) newPage - 1);
 				
 			} catch (NumberFormatException e) {
-				this.getServletContext().getRequestDispatcher( "/WEB-INF/views/500.jsp" ).forward( request, response );
+				this.getServletContext().getRequestDispatcher( ERROR500 ).forward( request, response );
 			}
 		}
 		
@@ -81,7 +82,7 @@ public class Index extends HttpServlet {
 		request.setAttribute("navFooter", navFooter);
 		request.setAttribute("nbPages", nbPages);
 		
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/views/dashboard.jsp" ).forward( request, response );
+		this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
 	}
 	
 	private List<String> getNavFooter(Integer page) {

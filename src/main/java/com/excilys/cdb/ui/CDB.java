@@ -84,10 +84,10 @@ public class CDB {
 					newComputer.setName(scan.next());
 					break;
 				case "introduced":
-					newComputer.setIntroduced(LocalDate.parse(scan.next()));
+					newComputer.setIntroduced(scan.nextLine().trim() != null ? LocalDate.parse(scan.next()) : null);
 					break;
 				case "discontinued":
-					newComputer.setDiscontinued(LocalDate.parse(scan.next()));
+					newComputer.setDiscontinued(scan.next() != null ? LocalDate.parse(scan.next()) : null);
 					break;
 				case "company":
 					newComputer.setCompany(new Company.CompanyBuilder().withId(scan.nextInt()).build());

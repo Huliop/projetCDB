@@ -59,7 +59,7 @@ public class ComputerDTO {
 		this.companyId = companyId;
 	}
 
-	public static class ComputerBuilderDTO {
+	public static class ComputerDTOBuilder {
 		private Integer id;
 		private String name;
 		private String introduced;
@@ -67,32 +67,32 @@ public class ComputerDTO {
 		private String companyName;
 		private Integer companyId;
 
-		public ComputerBuilderDTO withId(Integer id) {
+		public ComputerDTOBuilder withId(Integer id) {
 			this.id = id;
 			return this;
 		}
 
-		public ComputerBuilderDTO withName(String name) {
+		public ComputerDTOBuilder withName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public ComputerBuilderDTO withIntroduced(String introduced) {
+		public ComputerDTOBuilder withIntroduced(String introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public ComputerBuilderDTO withDiscontinued(String discontinued) {
+		public ComputerDTOBuilder withDiscontinued(String discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
 
-		public ComputerBuilderDTO withCompanyName(String companyName) {
+		public ComputerDTOBuilder withCompanyName(String companyName) {
 			this.companyName = companyName;
 			return this;
 		}
 		
-		public ComputerBuilderDTO withCompanyId(Integer companyId) {
+		public ComputerDTOBuilder withCompanyId(Integer companyId) {
 			this.companyId = companyId;
 			return this;
 		}

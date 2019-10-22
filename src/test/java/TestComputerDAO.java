@@ -83,7 +83,9 @@ public class TestComputerDAO {
 				.build());
 
 		List<Computer> lComputerApres = instance.get();
-
+		
+		instance.get().stream().forEach(System.out::println);
+		
 		int nbApres = lComputerApres.size();
 
 		assertEquals("Le nombre d'ordinateur n'a pas augmenté, pas créé.. ?", nbAvant + 1, nbApres);
