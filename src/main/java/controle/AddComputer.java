@@ -1,6 +1,8 @@
 package controle;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,14 +35,13 @@ public class AddComputer extends HttpServlet {
     private List<Company> companies;
     private ComputerService instanceService;
     private ComputerMapper  instanceMapper;
-    private boolean success = false;
-    private String resultat;
+    private boolean success;
     private Map<String,String> errors;
     
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddComputer() {
+    public AddComputer() {	
         super();
     }
 
@@ -50,6 +51,7 @@ public class AddComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		companies = CompanyService.getInstance().get();
 		request.setAttribute("companies", companies);
+		errors = new HashMap<String, String>();
 		
 		this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
 	}
@@ -61,14 +63,22 @@ public class AddComputer extends HttpServlet {
 		instanceService = ComputerService.getInstance();
 		instanceMapper = ComputerMapper.getInstance();
 		companies = CompanyService.getInstance().get();
-		
-		request.setAttribute("companies", companies);
+		errors = new HashMap<String, String>();
 		
         ComputerDTO computer = createFromRequest(request);
         
-        Computer newComputer = instanceMapper.fromComputerDTO(computer);
+        if (computer != null) {
+        	Computer newComputer = instanceMapper.fromComputerDTO(computer);
+        	instanceService.create(newComputer);
+        	success = true;
+        }
+        else {
+        	success = false;
+        }
         
-        instanceService.create(newComputer);
+        request.setAttribute("companies", companies);
+        request.setAttribute("success", success);
+        request.setAttribute("errors", errors);
 		
         this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
 	}
@@ -79,17 +89,63 @@ public class AddComputer extends HttpServlet {
 		String discontinued = getValeurChamp(request, CHAMP_DISCONTINUED_DATE);
 		String companyId    = getValeurChamp(request, CHAMP_COMPANY_ID);
 		
-		return new ComputerDTO.ComputerDTOBuilder()
-			.withName(computerName)
-			.withCompanyId(Integer.valueOf(companyId))
-			.withIntroduced(introduced != null ? introduced : null)
-			.withDiscontinued(discontinued != null ? discontinued : null)
-			.build();
+		try {
+			verifDate(introduced);
+			try {
+				verifDate(discontinued);
+				try {
+					verifOrdreDate(introduced, discontinued);
+					if (computerName != null) {
+						return new ComputerDTO.ComputerDTOBuilder()
+								.withName(computerName)
+								.withCompanyId(Integer.valueOf(companyId))
+								.withIntroduced(introduced != null ? introduced : null)
+								.withDiscontinued(discontinued != null ? discontinued : null)
+								.build();
+					}
+				} catch (Exception e) {
+					errors.put(CHAMP_DISCONTINUED_DATE, e.getMessage());
+				}
+			} catch (Exception e) {
+				errors.put(CHAMP_DISCONTINUED_DATE, e.getMessage());
+			}
+		} catch (Exception e) {
+			errors.put(CHAMP_INTRODUCED_DATE, e.getMessage());
+			try {
+				verifDate(discontinued);
+			}
+			catch (Exception ex) {
+				errors.put(CHAMP_DISCONTINUED_DATE, ex.getMessage());
+			}
+		}
+		return null;
 	}
 	
-	private static String getValeurChamp( HttpServletRequest request, String nomChamp ) {
+	private void verifDate(String date) throws Exception {
+		if (date != null) {
+			try {
+				LocalDate.parse(date);
+			}
+			catch (Exception e){
+				throw new Exception("You must give a valid date");
+			}
+		}
+	}
+	
+	private void verifOrdreDate(String introduced, String discontinued) throws Exception {
+		if (introduced != null && discontinued != null) {
+			if (!LocalDate.parse(discontinued).isAfter(LocalDate.parse(introduced))) {
+				throw new Exception("You must give a discontinued date which is later than introduced's");
+			}
+		}
+	}
+	
+	private String getValeurChamp( HttpServletRequest request, String nomChamp ) {
 	    String valeur = request.getParameter( nomChamp );
 	    if ( valeur == null || valeur.trim().length() == 0 ) {
+	    	if (nomChamp.equals(CHAMP_COMPUTER_NAME)) {
+	    		errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
+	    	}
 	        return null;
 	    } else {
 	        return valeur.trim();

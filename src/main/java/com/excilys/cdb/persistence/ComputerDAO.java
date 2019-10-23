@@ -86,10 +86,8 @@ public class ComputerDAO {
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-            	System.out.println("HERE");
                 computer.setId(rs.getInt(1));
             }
-            System.out.println("CREATED");
 		} catch (SQLException e) {
 			System.out.println("Error creating computer : " + e.getMessage());
 		}
