@@ -125,7 +125,7 @@ public class ComputerDAO {
 		} else {
 			stmt.setDate(3,  null);
 		}
-		if (computer.getCompany() != null) {
+		if (computer.getCompany().getId() != null) {
 			stmt.setInt(4, computer.getCompany().getId());
 		} else {
 			stmt.setDate(4,  null);

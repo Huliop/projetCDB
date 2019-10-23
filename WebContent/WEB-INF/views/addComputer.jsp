@@ -18,16 +18,15 @@
         </div>
     </header>
     
-    
-    <section id="main">
-        <c:if test="${ requestScope.success == true }">
-        <div class="container">
-            <div class="alert alert-success">
-                The computer has been created!
-            </div>
-        </div>
-        </c:if>
-    </section>
+    <c:if test="${ requestScope.success == true }">
+	    <section id="main">
+	        <div class="container">
+	            <div class="alert alert-success">
+	                The computer has been created!
+	            </div>
+	        </div>
+	    </section>
+    </c:if>
     
     <c:if test="${ !empty requestScope.errors }">
         <section id="main">
@@ -48,8 +47,9 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name (*)</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" value="<c:out value="${ param.computerName }" />" placeholder="Ex : PC de Schwarzeneger">
+                                <input type="text" autocomplete="false" class="form-control" id="computerName" name="computerName" value="<c:out value="${ param.computerName }" />" placeholder="Ex : PC de Schwarzeneger">
                                 <span class="erreur text-danger">${ errors.computerName }</span>
+                                <span id="erreurName" class="text-danger">You must give a computer name</span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -60,6 +60,7 @@
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinuedDate" value="<c:out value="${ param.discontinuedDate }" />" placeholder="Doit être posterieure à celle d'au dessus">
                                 <span class="erreur text-danger">${ errors.discontinuedDate }</span>
+                                <span id="erreurDiscontinued" class="text-danger" style="display:none;">You must give a discontinued date which is later than introduced's</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -73,7 +74,7 @@
                         </fieldset>
                         <span style="text-weight:bold;">Field marked with (*) is mandatory !</span>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" id="submit" disabled value="Add" class="btn btn-primary">
                             or
                             <a href="<c:url value='/index' />" class="btn btn-default">Cancel</a>
                         </div>
@@ -82,5 +83,11 @@
             </div>
         </div>
     </section>
+    
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="js/verifAddComputer.js"></script>
+
 </body>
 </html>

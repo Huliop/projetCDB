@@ -98,7 +98,7 @@ public class AddComputer extends HttpServlet {
 					if (computerName != null) {
 						return new ComputerDTO.ComputerDTOBuilder()
 								.withName(computerName)
-								.withCompanyId(Integer.valueOf(companyId))
+								.withCompanyId(Integer.valueOf(companyId) != 0 ? Integer.valueOf(companyId) : null)
 								.withIntroduced(introduced != null ? introduced : null)
 								.withDiscontinued(discontinued != null ? discontinued : null)
 								.build();
