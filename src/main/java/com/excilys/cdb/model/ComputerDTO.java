@@ -50,7 +50,7 @@ public class ComputerDTO {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	
+
 	public Integer getCompanyId() {
 		return companyId;
 	}
@@ -91,7 +91,7 @@ public class ComputerDTO {
 			this.companyName = companyName;
 			return this;
 		}
-		
+
 		public ComputerDTOBuilder withCompanyId(Integer companyId) {
 			this.companyId = companyId;
 			return this;
@@ -114,6 +114,4 @@ public class ComputerDTO {
 		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
 				+ discontinued + ", companyName=" + companyName + ", companyId=" + companyId + "]";
 	}
-	
-	
 }
