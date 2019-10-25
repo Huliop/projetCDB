@@ -85,7 +85,7 @@
             <ul class="pagination">
                 <li>
                    <a href="<c:url value='/index'>
-                                <c:param name="numPage" value="0"/>
+                                <c:param name="numPage" value='${ requestScope.numPages - 1 }'/>
                             </c:url>" aria-label="Previous">
                        <span aria-hidden="true">&laquo;</span>
                       </a>
@@ -102,7 +102,7 @@
                 </c:forEach>
                 <li>
                 <a href="<c:url value='/index'>
-                              <c:param name="numPage" value='${ requestScope.nbPages + 1 }'/>
+                              <c:param name="numPage" value='${ requestScope.numPages + 1 }'/>
                          </c:url>" aria-label="Next">
                          <span aria-hidden="true">&raquo;</span>
                 </a>

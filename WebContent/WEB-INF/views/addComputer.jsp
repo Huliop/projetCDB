@@ -18,11 +18,14 @@
         </div>
     </header>
     
+    <c:set var="s" value="false" />
+    
     <c:if test="${ requestScope.success == true }">
 	    <section id="main">
 	        <div class="container">
 	            <div class="alert alert-success">
 	                The computer has been created!
+	                <c:set var="s" value="false" />
 	            </div>
 	        </div>
 	    </section>
@@ -33,10 +36,13 @@
             <div class="container">
                 <div class="alert alert-danger">
                     Try again!
+                    <c:set var="s" value="true" />
                 </div>
             </div>
         </section>
     </c:if> 
+    
+    
 
     <section id="main">
         <div class="container">
@@ -47,8 +53,15 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name (*)</label>
-                                <input type="text" autocomplete="false" class="form-control" id="computerName" name="computerName" value="<c:out value="${ param.computerName }" />" placeholder="Ex : PC de Schwarzeneger">
-                                <span class="erreur text-danger">${ errors.computerName }</span>
+                                <c:out value ="${ s }" />
+                                <c:choose>
+                                    <c:when test='${ s != "false" }'>
+                                        <input type="text" autocomplete="false" class="form-control" id="computerName" name="computerName" placeholder="Ex : PC de Schwarzeneger" value="<c:out value='${ param.computerName }' />">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" autocomplete="false" class="form-control" id="computerName" name="computerName" placeholder="Ex : PC de Schwarzeneger">
+                                    </c:otherwise>
+                                </c:choose>
                                 <span id="erreurName" class="text-danger">You must give a computer name</span>
                             </div>
                             <div class="form-group">

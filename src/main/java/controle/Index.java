@@ -34,39 +34,18 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		nbComputers = computerService.get().size();
-
+		
 		if (request.getParameter("numPage") != null) {
-			try {
-				Integer i = Integer.parseInt(request.getParameter("numPage")) - 1;
-				if (i >= 0 && i <= (nbPages - 1)) {
-					myPage.setCurrentPage(i);
-				} else if (i == -1 && myPage.getCurrentPage() > 0) {
-					myPage.setCurrentPage(myPage.getCurrentPage() - 1);
-				} else if (i == nbPages && myPage.getCurrentPage() < (nbPages - 1)) {
-					myPage.setCurrentPage(myPage.getCurrentPage() + 1);
-				} else {
-					myPage.setCurrentPage(0);
-				}
-			} catch (NumberFormatException e) {
-				this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
-			}
+			updateNumPage(request, response);
 		}
-
+		
 		if (request.getParameter("offset") != null) {
-			try {
-				Integer i = Integer.parseInt(request.getParameter("offset"));
-				myPage.setOffset(i);
-
-				double newPage = (myPage.getCurrentPage() + 1) * ((double) (nbComputers / i + (nbComputers % i == 0 ? 0 : 1)) / (double) nbPages);
-				myPage.setCurrentPage((int) newPage - 1);
-
-			} catch (NumberFormatException e) {
-				this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
-			}
+			updateOffset(request, response);
 		}
 
 		computerService.get(myPage);
 		List<Computer> computers = myPage.getElements();
+		int numPages = myPage.getCurrentPage() + 1;
 
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
 		List<String> navFooter = this.getNavFooter(myPage.getCurrentPage());
@@ -74,9 +53,36 @@ public class Index extends HttpServlet {
 		request.setAttribute("computers", computers);
 		request.setAttribute("nbComputers", nbComputers);
 		request.setAttribute("navFooter", navFooter);
-		request.setAttribute("nbPages", nbPages);
+		request.setAttribute("numPages", numPages);
 
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+	}
+	private void updateNumPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			Integer i = Integer.parseInt(request.getParameter("numPage"));
+			if (i > 0 || i < nbPages + 1) {
+				try {
+					myPage.setCurrentPage(i-1);
+				} catch (Exception e){
+					System.out.println(e.getMessage());
+				}
+			}
+		} catch (NumberFormatException e) {
+			this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
+		}
+	}
+	
+	private void updateOffset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			Integer i = Integer.parseInt(request.getParameter("offset"));
+			myPage.setOffset(i);
+
+			double newPage = (myPage.getCurrentPage() + 1) * ((double) (nbComputers / i + (nbComputers % i == 0 ? 0 : 1)) / (double) nbPages);
+			myPage.setCurrentPage((int) newPage - 1);
+
+		} catch (NumberFormatException e) {
+			this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
+		}
 	}
 
 	private List<String> getNavFooter(Integer page) {

@@ -15,12 +15,6 @@ import com.excilys.cdb.persistence.ComputerDAO;
 
 public class TestComputerDAO {
 
-	@BeforeClass
-	public static void beforeAll() {
-		DBConnection dbC = DBConnection.getInstance();
-		dbC.changeURLToTest();
-	}
-
 	@Test
 	public void testGetInstance() {
 		assertTrue("getInstance devrait toujours renvoyer une instance", ComputerDAO.getInstance() != null);

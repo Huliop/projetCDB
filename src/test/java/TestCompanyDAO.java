@@ -15,8 +15,6 @@ public class TestCompanyDAO {
 
 	@BeforeClass
 	public static void beforeAll() {
-		DBConnection dbC = DBConnection.getInstance();
-		dbC.changeURLToTest();
 	}
 
 	@Test

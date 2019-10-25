@@ -77,6 +77,8 @@ public class ComputerDAO {
 			}
 		} catch (SQLException e) {
 			System.out.println("Error getting computers paginated : " + e.getMessage());
+		} finally {
+			DBConnection.closeConnection();
 		}
 	}
 
