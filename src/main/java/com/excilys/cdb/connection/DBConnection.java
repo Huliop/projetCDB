@@ -8,15 +8,15 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 
 public class DBConnection {
-	
+
 	private static HikariConfig config = new HikariConfig("/DBProperties");
     private static HikariDataSource ds = new HikariDataSource(config);
 
 	public static DBConnection instance;
-	
+
 	private DBConnection() { }
-	
-	private static Connection instanceConnection; 
+
+	private static Connection instanceConnection;
 
 	public static DBConnection getInstance() {
 		if (instance == null) {
@@ -36,8 +36,8 @@ public class DBConnection {
 			}
 		}
 		return instanceConnection;
-	}	
-	
+	}
+
 	public static Connection closeConnection() {
 		if (instanceConnection != null) {
 			try {

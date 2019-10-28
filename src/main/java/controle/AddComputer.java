@@ -38,7 +38,7 @@ public class AddComputer extends HttpServlet {
      */
     public AddComputer() {
         super();
-        
+
         instanceService = ComputerService.getInstance();
 		instanceMapper = ComputerMapper.getInstance();
 		instanceValidator = FieldsValidator.getInstance();
@@ -50,7 +50,7 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		request.setAttribute("companies", companies);
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
@@ -59,7 +59,7 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
         ComputerDTO computer = instanceValidator.createFromRequest(request, errors, false);
 
         if (computer != null) {

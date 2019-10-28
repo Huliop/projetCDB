@@ -26,6 +26,7 @@ public class ComputerDAO {
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private final String DELETE = "DELETE FROM computer WHERE id = ?";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
 	private ComputerDAO(ComputerMapper computerMapper) {
 		this.computerMapper = computerMapper;
@@ -115,6 +116,15 @@ public class ComputerDAO {
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Error deleting computer : " + e.getMessage());
+		}
+	}
+	
+	public void search(String pattern) {
+		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(SEARCH)) {
+			stmt.setString(1, "%" + pattern + "%");
+			stmt.setString(2, "%" + pattern + "%");
+		} catch (SQLException e) {
+			System.out.println("Error searching : " + e.getMessage());
 		}
 	}
 

@@ -12,9 +12,9 @@ public class FieldsValidator {
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
     private static final String CHAMP_DISCONTINUED_DATE  = "discontinuedDate";
     private static final String CHAMP_COMPANY_ID         = "company";
-    
+
 	public static FieldsValidator instance;
-	
+
 	public static FieldsValidator getInstance() {
 		if (instance == null) {
 			instance = new FieldsValidator();
@@ -22,23 +22,25 @@ public class FieldsValidator {
 
 		return instance;
 	}
-	
+
 	public ComputerDTO createFromRequest(HttpServletRequest request, Map<String, String> errors, boolean isEdit) {
 		String computerName     = getValeurChamp(request, CHAMP_COMPUTER_NAME, errors);
 		String introducedDate   = getValeurChamp(request, CHAMP_INTRODUCED_DATE, errors);
 		String discontinuedDate = getValeurChamp(request, CHAMP_DISCONTINUED_DATE, errors);
 		String companyId        = getValeurChamp(request, CHAMP_COMPANY_ID, errors);
 		Integer id = 0;
-		
-		if (isEdit) id = Integer.valueOf(request.getParameter("idComputer"));
-		
+
+		if (isEdit) {
+			id = Integer.valueOf(request.getParameter("idComputer"));
+		}
+
 		verifDate(introducedDate, errors);
 		verifDate(discontinuedDate, errors);
-		
+
 		if (errors.size() > 0) {
 			verifOrdreDate(introducedDate, discontinuedDate, errors);
 		}
-		
+
 		if (errors.size() == 0) {
 			ComputerDTO  comp = new ComputerDTO.ComputerDTOBuilder()
 					.withName(computerName)
@@ -56,7 +58,7 @@ public class FieldsValidator {
 			return null;
 		}
 	}
-	
+
 	public void verifDate(String date, Map<String, String> errors) {
 		if (date != null) {
 			try {

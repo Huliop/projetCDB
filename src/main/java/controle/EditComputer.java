@@ -25,19 +25,19 @@ public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VUE = "/WEB-INF/views/editComputer.jsp";
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
-    
+
     private ComputerService instanceService;
     private ComputerMapper  instanceMapper;
     private FieldsValidator instanceValidator;
     private List<Company> companies;
     private Map<String, String> errors;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EditComputer() {
         super();
-        
+
         instanceService = ComputerService.getInstance();
 		instanceMapper = ComputerMapper.getInstance();
 		instanceValidator = FieldsValidator.getInstance();
@@ -49,7 +49,7 @@ public class EditComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		try {
 			Computer myComputer = ComputerService.getInstance().get(Integer.valueOf(request.getParameter("idComputer")));
 			request.setAttribute("computer", myComputer);
@@ -59,7 +59,7 @@ public class EditComputer extends HttpServlet {
 		} catch (ComputerNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
 
@@ -67,7 +67,7 @@ public class EditComputer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		ComputerDTO computer = instanceValidator.createFromRequest(request, errors, true);
 
         if (computer != null) {

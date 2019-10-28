@@ -35,11 +35,11 @@ public class Index extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		nbComputers = instanceService.get().size();
-		
+
 		if (request.getParameter("numPage") != null) {
 			updateNumPage(request, response);
 		}
-		
+
 		if (request.getParameter("offset") != null) {
 			updateOffset(request, response);
 		}
@@ -58,40 +58,39 @@ public class Index extends HttpServlet {
 
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		String lCompSelected = request.getParameter("selection");
-		
+
 		String[] lCleanCompSelected = lCompSelected.split(",");
 		int length = lCleanCompSelected.length;
-		
+
 		for (String s : lCleanCompSelected) {
 			try {
 				instanceService.delete(Integer.valueOf(s));
 			} catch (Exception e) {
 				System.out.println("tthere");
-				errors.put("errorDeleting","A problem has occured while deleting the computers.. Try Again");
+				errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
 			}
 		}
-		
+
 		if (errors.size() == 0) {
 			response.sendRedirect("index?successDelete=true&numPage=1&length=" + length);
-		}
-		else {
+		} else {
 			request.setAttribute("errors", errors);
 			response.sendRedirect("505");
 		}
-		
+
 	}
-	
+
 	private void updateNumPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Integer i = Integer.parseInt(request.getParameter("numPage"));
 			if (i > 0 || i < nbPages + 1) {
 				try {
-					myPage.setCurrentPage(i-1);
-				} catch (Exception e){
+					myPage.setCurrentPage(i - 1);
+				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 			}
@@ -99,7 +98,7 @@ public class Index extends HttpServlet {
 			this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
 		}
 	}
-	
+
 	private void updateOffset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Integer i = Integer.parseInt(request.getParameter("offset"));
