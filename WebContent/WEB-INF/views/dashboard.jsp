@@ -18,6 +18,16 @@
             <a class="navbar-brand" href="<c:url value="/index" />"> Application - Computer Database </a>
         </div>
     </header>
+    
+    <c:if test='${ param.success == "true" }'>
+        <section id="main">
+            <div class="container">
+                <div class="alert alert-success">
+                    The computer has been edited!
+                </div>
+            </div>
+        </section>
+    </c:if>
 
     <section id="main">
         <div class="container">
@@ -35,7 +45,7 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="<c:url value='/addComputer' />">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Delete</a>
                 </div>
             </div>
         </div>
@@ -69,7 +79,7 @@
                     <c:forEach var="computer" items="${ requestScope.computers }">
                         <tr>
                             <td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
-                            <td><a href="editComputer.jsp" onclick=""><c:out value="${ computer.name }" /></a></td>
+                            <td><a href="<c:url value='/editComputer'><c:param name="idComputer" value="${ computer.id }" /></c:url>" onclick=""><c:out value="${ computer.name }" /></a></td>
                             <td><c:out value="${ computer.introduced }" /></td>
                             <td><c:out value="${ computer.discontinued }" /></td>
                             <td><c:out value="${ computer.company.name }" /></td>

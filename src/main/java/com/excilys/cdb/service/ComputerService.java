@@ -3,6 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
+import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDAO;
@@ -36,12 +37,22 @@ public class ComputerService {
 		computerDao.get(page);
 	}
 
-	public void create(Computer computer) {
-		computerDao.create(computer);
+	public void create(Computer computer) throws InvalidDataException {
+		try {
+			computerDao.create(computer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new InvalidDataException("You must give a valid date");
+		}
 	}
 
-	public void update(Computer computer) {
-		computerDao.update(computer);
+	public void update(Computer computer) throws InvalidDataException {
+		try {
+			computerDao.update(computer);
+		} catch (InvalidDataException e) {
+			e.printStackTrace();
+			throw new InvalidDataException("You must give a valid date");
+		}
 	}
 
 	public void delete(int computerId) {

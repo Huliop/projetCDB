@@ -4,10 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.excilys.cdb.connection.DBConnection;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -67,14 +65,18 @@ public class TestComputerDAO {
 		List<Computer> lComputerAvant = instance.get();
 		int nbAvant = lComputerAvant.size();
 
-		instance.create(new Computer.ComputerBuilder().
-				withName("PC-BG").
-				withIntroduced(LocalDate.parse("2011-11-11")).
-				withDiscontinued(LocalDate.parse("2012-11-11")).
-				withCompany(new Company.CompanyBuilder().
-						withId(1).
-						withName("Apple Inc.").build())
-				.build());
+		try {
+			instance.create(new Computer.ComputerBuilder().
+					withName("PC-BG").
+					withIntroduced(LocalDate.parse("2011-11-11")).
+					withDiscontinued(LocalDate.parse("2012-11-11")).
+					withCompany(new Company.CompanyBuilder().
+							withId(1).
+							withName("Apple Inc.").build())
+					.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		List<Computer> lComputerApres = instance.get();
 		

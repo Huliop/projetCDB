@@ -42,7 +42,6 @@
         </section>
     </c:if> 
     
-    
 
     <section id="main">
         <div class="container">
@@ -53,7 +52,6 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name (*)</label>
-                                <c:out value ="${ s }" />
                                 <c:choose>
                                     <c:when test='${ s != "false" }'>
                                         <input type="text" autocomplete="false" class="form-control" id="computerName" name="computerName" placeholder="Ex : PC de Schwarzeneger" value="<c:out value='${ param.computerName }' />">
@@ -68,12 +66,14 @@
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introducedDate" value="<c:out value="${ param.introducedDate }" />" placeholder="Ex : 2001-11-23">
                                 <span class="erreur text-danger">${ errors.introducedDate }</span>
+                                <span id="erreurIntroduced" class="text-danger" style="display:none;">You must give a date after January 1st 1970 and before January 27th 2038</span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinuedDate" value="<c:out value="${ param.discontinuedDate }" />" placeholder="Doit être posterieure à celle d'au dessus">
                                 <span class="erreur text-danger">${ errors.discontinuedDate }</span>
                                 <span id="erreurDiscontinued" class="text-danger" style="display:none;">You must give a discontinued date which is later than introduced's</span>
+                                <span id="erreurDiscontinuedFormat" class="text-danger" style="display:none;">You must give a date after January 1st 1970 and before January 27th 2038</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -100,7 +100,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="js/verifAddComputer.js"></script>
+<script src="js/verifFields.js"></script>
 
 </body>
 </html>

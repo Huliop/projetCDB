@@ -9,6 +9,7 @@ public class ComputerDTO {
 	private Integer companyId;
 
 	private ComputerDTO() {
+		System.out.println("aaa");
 	}
 
 	public Integer getId() {

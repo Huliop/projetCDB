@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.cdb.connection.DBConnection;
+import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -82,7 +83,7 @@ public class ComputerDAO {
 		}
 	}
 
-	public void create(Computer computer) {
+	public void create(Computer computer) throws Exception {
 		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
 			setStatementParameters(computer, stmt);
 			stmt.executeUpdate();
@@ -92,16 +93,18 @@ public class ComputerDAO {
             }
 		} catch (SQLException e) {
 			System.out.println("Error creating computer : " + e.getMessage());
+			throw new InvalidDataException("Invalid Data");
 		}
 	}
 
-	public void update(Computer computer) {
+	public void update(Computer computer) throws InvalidDataException {
 		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(UPDATE)) {
 			setStatementParameters(computer, stmt);
 			stmt.setInt(5, computer.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Error updating computer : " + e.getMessage());
+			throw new InvalidDataException("Invalid Data");
 		}
 	}
 
