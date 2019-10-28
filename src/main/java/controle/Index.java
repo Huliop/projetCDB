@@ -2,7 +2,9 @@ package controle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,21 +21,20 @@ public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VUE = "/WEB-INF/views/dashboard.jsp";
 	public static final String ERROR500 = "/WEB-INF/views/500.jsp";
-	private ComputerService computerService;
+	private ComputerService instanceService;
 	private Integer nbComputers;
 	private Integer nbPages;
+	private Map<String, String> errors;
 	Page<Computer> myPage = new Page<Computer>();
 
     public Index() {
     	super();
-    	computerService = ComputerService.getInstance();
+    	instanceService = ComputerService.getInstance();
+    	errors = new HashMap<String, String>();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		nbComputers = computerService.get().size();
+		nbComputers = instanceService.get().size();
 		
 		if (request.getParameter("numPage") != null) {
 			updateNumPage(request, response);
@@ -43,7 +44,7 @@ public class Index extends HttpServlet {
 			updateOffset(request, response);
 		}
 
-		computerService.get(myPage);
+		instanceService.get(myPage);
 		List<Computer> computers = myPage.getElements();
 		int numPages = myPage.getCurrentPage() + 1;
 
@@ -57,6 +58,33 @@ public class Index extends HttpServlet {
 
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String lCompSelected = request.getParameter("selection");
+		
+		String[] lCleanCompSelected = lCompSelected.split(",");
+		int length = lCleanCompSelected.length;
+		
+		for (String s : lCleanCompSelected) {
+			try {
+				instanceService.delete(Integer.valueOf(s));
+			} catch (Exception e) {
+				System.out.println("tthere");
+				errors.put("errorDeleting","A problem has occured while deleting the computers.. Try Again");
+			}
+		}
+		
+		if (errors.size() == 0) {
+			response.sendRedirect("index?successDelete=true&numPage=1&length=" + length);
+		}
+		else {
+			request.setAttribute("errors", errors);
+			response.sendRedirect("505");
+		}
+		
+	}
+	
 	private void updateNumPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Integer i = Integer.parseInt(request.getParameter("numPage"));

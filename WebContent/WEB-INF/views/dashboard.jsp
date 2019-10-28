@@ -28,6 +28,32 @@
             </div>
         </section>
     </c:if>
+    <c:if test='${ param.successDelete == "true" }'>
+        <section id="main">
+            <div class="container">
+                <div class="alert alert-success">
+                    <c:choose>
+                        <c:when test='${ param.length <= 1 }'>
+                            ${ param.length } computer has been successfully deleted !
+                        </c:when>
+                        <c:otherwise>
+                            ${ param.length } computers have been successfully deleted !
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+        </section>
+    </c:if>
+    
+    <c:if test='${ !empty errors }'>
+        <section id="main">
+            <div class="container">
+                <div class="alert alert-danger">
+                    ${ errors.errorDeleting }
+                </div>
+            </div>
+        </section>
+    </c:if>
 
     <section id="main">
         <div class="container">
@@ -78,7 +104,7 @@
                 <tbody id="results">
                     <c:forEach var="computer" items="${ requestScope.computers }">
                         <tr>
-                            <td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
+                            <td class="editMode"><input type="checkbox" name="cb" class="cb" value='${ computer.id }'></td>
                             <td><a href="<c:url value='/editComputer'><c:param name="idComputer" value="${ computer.id }" /></c:url>" onclick=""><c:out value="${ computer.name }" /></a></td>
                             <td><c:out value="${ computer.introduced }" /></td>
                             <td><c:out value="${ computer.discontinued }" /></td>
