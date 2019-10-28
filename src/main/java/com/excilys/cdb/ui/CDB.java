@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
+import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -17,7 +18,7 @@ public class CDB {
 	private static CompanyService companyService = CompanyService.getInstance();
 	static Scanner scan =  new Scanner(System.in);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidDataException {
 
 		int choice = 0;
 
@@ -73,7 +74,7 @@ public class CDB {
 		});
 	}
 
-	private static void createComputer() {
+	private static void createComputer() throws InvalidDataException {
 		Computer newComputer = new Computer.ComputerBuilder().build();
 		for (Field field : Computer.class.getDeclaredFields()) {
 			System.out.println("Veuillez saisir le " + field.getName() + " du computer");
@@ -106,7 +107,7 @@ public class CDB {
 		computerService.delete(scan.nextInt());
 	}
 
-	private static void updateComputer() {
+	private static void updateComputer() throws InvalidDataException {
 		System.out.print("Saisir l'id de l'ordinateur à modifier : ");
 		Computer computerToUpdate = new Computer.ComputerBuilder().build();
 		try {

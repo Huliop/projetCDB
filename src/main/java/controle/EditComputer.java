@@ -1,7 +1,6 @@
 package controle;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +24,12 @@ import com.excilys.cdb.service.ComputerService;
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VUE = "/WEB-INF/views/editComputer.jsp";
-	private static final String CHAMP_COMPUTER_NAME      = "computerName";
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
-    private static final String CHAMP_DISCONTINUED_DATE  = "discontinuedDate";
-    private static final String CHAMP_COMPANY_ID         = "company";
     
     private ComputerService instanceService;
     private ComputerMapper  instanceMapper;
+    private FieldsValidator instanceValidator;
     private List<Company> companies;
-	private boolean success;
     private Map<String, String> errors;
        
     /**
@@ -41,6 +37,12 @@ public class EditComputer extends HttpServlet {
      */
     public EditComputer() {
         super();
+        
+        instanceService = ComputerService.getInstance();
+		instanceMapper = ComputerMapper.getInstance();
+		instanceValidator = FieldsValidator.getInstance();
+		companies = CompanyService.getInstance().get();
+		errors = new HashMap<String, String>();
     }
 
 	/**
@@ -51,18 +53,12 @@ public class EditComputer extends HttpServlet {
 		try {
 			Computer myComputer = ComputerService.getInstance().get(Integer.valueOf(request.getParameter("idComputer")));
 			request.setAttribute("computer", myComputer);
+			request.setAttribute("companies", companies);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ComputerNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		errors = new HashMap<String, String>();
-		
-		companies = CompanyService.getInstance().get();
-		request.setAttribute("companies", companies);
-		request.setAttribute("success", success);
-        request.setAttribute("errors", errors);
 		
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
@@ -71,91 +67,19 @@ public class EditComputer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		instanceService = ComputerService.getInstance();
-		instanceMapper = ComputerMapper.getInstance();
-		errors = new HashMap<String, String>();
-		companies = CompanyService.getInstance().get();
-
-		if (!updateFromRequest(request)) {
-			request.setAttribute("companies", companies);
-	        request.setAttribute("errors", errors);
-		} else {
-			//this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp" + "?success=true&numPage=3").forward(request, response);
-			response.sendRedirect("index?success=true&numPage=1");
-		}
-	}
-	
-	private boolean updateFromRequest(HttpServletRequest request) {
-		String computerName = getValeurChamp(request, CHAMP_COMPUTER_NAME);
-		String introduced   = getValeurChamp(request, CHAMP_INTRODUCED_DATE);
-		String discontinued = getValeurChamp(request, CHAMP_DISCONTINUED_DATE);
-		String companyId    = getValeurChamp(request, CHAMP_COMPANY_ID);
-		Integer id = Integer.valueOf(request.getParameter("idComputer"));
 		
-		try {
-			verifDate(introduced);
-			try {
-				verifDate(discontinued);
-				try {
-					verifOrdreDate(introduced, discontinued);
-					if (computerName != null) {
-						ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder()
-								.withId(id)
-								.withName(computerName)
-								.withIntroduced(introduced != null ? introduced : null)
-								.withDiscontinued(discontinued != null ? discontinued : null)
-								.withCompanyId(Integer.valueOf(companyId) != 0 ? Integer.valueOf(companyId) : null)
-								.build();
-						instanceService.update(instanceMapper.fromComputerDTO(comp));
-						return true;
-					} else {
-						errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
-					}
-				} catch (Exception e) {
-					errors.put(CHAMP_DISCONTINUED_DATE, e.getMessage());
-				}
-			} catch (Exception e) {
-				errors.put(CHAMP_DISCONTINUED_DATE, e.getMessage());
-			}
-		} catch (Exception e) {
-			errors.put(CHAMP_INTRODUCED_DATE, e.getMessage());
-			try {
-				verifDate(discontinued);
-			} catch (Exception ex) {
-				errors.put(CHAMP_DISCONTINUED_DATE, ex.getMessage());
-			}
-		}
-		return false;
-	}
-	
-	private void verifDate(String date) throws Exception {
-		if (date != null) {
-			try {
-				LocalDate.parse(date);
-			} catch (Exception e) {
-				throw new Exception("You must give a valid date");
-			}
-		}
-	}
+		ComputerDTO computer = instanceValidator.createFromRequest(request, errors, true);
 
-	private void verifOrdreDate(String introduced, String discontinued) throws Exception {
-		if (introduced != null && discontinued != null) {
-			if (!LocalDate.parse(discontinued).isAfter(LocalDate.parse(introduced))) {
-				throw new Exception("You must give a discontinued date which is later than introduced's");
-			}
-		}
+        if (computer != null) {
+        	try {
+        		Computer newComputer = instanceMapper.fromComputerDTO(computer);
+        		instanceService.update(newComputer);
+        		response.sendRedirect("index?success=true&numPage=1");
+        	} catch (InvalidDataException e) {
+        		errors.put(CHAMP_INTRODUCED_DATE, e.getMessage());
+        		request.setAttribute("companies", companies);
+    	        request.setAttribute("errors", errors);
+        	}
+        }
 	}
-
-	private String getValeurChamp(HttpServletRequest request, String nomChamp) {
-	    String valeur = request.getParameter(nomChamp);
-	    if (valeur == null || valeur.trim().length() == 0) {
-	    	if (nomChamp.equals(CHAMP_COMPUTER_NAME)) {
-	    		errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
-	    	}
-	        return null;
-	    } else {
-	        return valeur.trim();
-	    }
-	}
-
 }
