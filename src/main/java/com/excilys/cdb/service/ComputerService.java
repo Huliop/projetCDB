@@ -33,8 +33,8 @@ public class ComputerService {
 		return computerDao.get();
 	}
 
-	public void get(Page<Computer> page) {
-		computerDao.get(page);
+	public void get(Page<Computer> page, String query, String pattern, boolean isSearch) {
+		computerDao.get(page, query, pattern, isSearch);
 	}
 
 	public void create(Computer computer) throws InvalidDataException {
@@ -53,6 +53,10 @@ public class ComputerService {
 			e.printStackTrace();
 			throw new InvalidDataException("You must give a valid date");
 		}
+	}
+	
+	public List<Computer> search(String pattern) {
+		return computerDao.search(pattern);
 	}
 
 	public void delete(int computerId) {

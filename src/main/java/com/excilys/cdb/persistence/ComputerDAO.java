@@ -67,9 +67,13 @@ public class ComputerDAO {
 		return result;
 	}
 
-	public void get(Page<Computer> page) {
-		try (Statement stmt = DBConnection.getConnection().createStatement()) {
-			ResultSet resultSet = stmt.executeQuery(SELECT_ALL + " LIMIT " + page.getFirstLimit() + "," + page.getOffset());
+	public void get(Page<Computer> page, String query, String pattern, boolean isSearch) {
+		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(query + " LIMIT " + page.getFirstLimit() + "," + page.getOffset())) {
+			if (isSearch) {
+				stmt.setString(1, "%" + pattern + "%");
+				stmt.setString(2, "%" + pattern + "%");
+			}
+			ResultSet resultSet = stmt.executeQuery();
 
 			List<Computer> newElements = new ArrayList<>();
 			page.setElements(newElements);
@@ -119,13 +123,21 @@ public class ComputerDAO {
 		}
 	}
 	
-	public void search(String pattern) {
+	public List<Computer> search(String pattern) {
+		List<Computer> result = new ArrayList<>();
 		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(SEARCH)) {
 			stmt.setString(1, "%" + pattern + "%");
 			stmt.setString(2, "%" + pattern + "%");
+			
+			ResultSet resultSet = stmt.executeQuery();
+
+			while (resultSet.next()) {
+				result.add(computerMapper.fromResultSet(resultSet));
+			}
 		} catch (SQLException e) {
 			System.out.println("Error searching : " + e.getMessage());
 		}
+		return result;
 	}
 
 	private void setStatementParameters(Computer computer, PreparedStatement stmt) throws SQLException {

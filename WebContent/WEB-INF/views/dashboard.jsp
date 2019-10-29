@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -122,6 +122,9 @@
                 <li>
                    <a href="<c:url value='/index'>
                                 <c:param name="numPage" value='${ requestScope.numPages - 1 }'/>
+                                <c:if test="${ param.search != null && param.search != '' }">
+                                    <c:param name="search" value="${ param.search }" />
+                                </c:if>
                             </c:url>" aria-label="Previous">
                        <span aria-hidden="true">&laquo;</span>
                       </a>
@@ -132,6 +135,9 @@
                                             <c:if test="${ number != '...'}">
                                                 <c:param name="numPage" value="${ number }"/>
                                             </c:if> 
+                                            <c:if test="${ param.search != null && param.search != '' }">
+                                                <c:param name="search" value="${ param.search }" />
+                                            </c:if>
                                         </c:url>">${ number }
                             </a>
                         </li>
@@ -139,6 +145,9 @@
                 <li>
                 <a href="<c:url value='/index'>
                               <c:param name="numPage" value='${ requestScope.numPages + 1 }'/>
+                              <c:if test="${ param.search != null && param.search != '' }">
+                                <c:param name="search" value="${ param.search }" />
+                              </c:if>
                          </c:url>" aria-label="Next">
                          <span aria-hidden="true">&raquo;</span>
                 </a>
