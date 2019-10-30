@@ -5,23 +5,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.ComputerDTO;
 
+@Component
 public class FieldsValidator {
 	private static final String CHAMP_COMPUTER_NAME      = "computerName";
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
     private static final String CHAMP_DISCONTINUED_DATE  = "discontinuedDate";
     private static final String CHAMP_COMPANY_ID         = "company";
-
-	public static FieldsValidator instance;
-
-	public static FieldsValidator getInstance() {
-		if (instance == null) {
-			instance = new FieldsValidator();
-		}
-
-		return instance;
-	}
 
 	public ComputerDTO createFromRequest(HttpServletRequest request, Map<String, String> errors, boolean isEdit) {
 		String computerName     = getValeurChamp(request, CHAMP_COMPUTER_NAME, errors);

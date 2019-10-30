@@ -5,11 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.exceptions.InvalidDataException;
@@ -20,38 +25,41 @@ import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
+@Controller
 @WebServlet("/editComputer")
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VUE = "/WEB-INF/views/editComputer.jsp";
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
-
+    
+    @Autowired
     private ComputerService instanceService;
+    @Autowired
     private ComputerMapper  instanceMapper;
+    @Autowired
     private FieldsValidator instanceValidator;
+    @Autowired
+    private CompanyService instanceCompany;
+    
     private List<Company> companies;
     private Map<String, String> errors;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public EditComputer() {
         super();
-
-        instanceService = ComputerService.getInstance();
-		instanceMapper = ComputerMapper.getInstance();
-		instanceValidator = FieldsValidator.getInstance();
-		companies = CompanyService.getInstance().get();
 		errors = new HashMap<String, String>();
     }
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+    	super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		companies = instanceCompany.get();
 		try {
-			Computer myComputer = ComputerService.getInstance().get(Integer.valueOf(request.getParameter("idComputer")));
+			Computer myComputer = instanceService.get(Integer.valueOf(request.getParameter("idComputer")));
 			request.setAttribute("computer", myComputer);
 			request.setAttribute("companies", companies);
 		} catch (NumberFormatException e) {
@@ -63,11 +71,9 @@ public class EditComputer extends HttpServlet {
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		companies = instanceCompany.get();
 		ComputerDTO computer = instanceValidator.createFromRequest(request, errors, true);
 
         if (computer != null) {

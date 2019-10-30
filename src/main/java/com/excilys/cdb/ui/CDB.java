@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.model.Company;
@@ -14,8 +16,11 @@ import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 public class CDB {
-	private static ComputerService computerService = ComputerService.getInstance();
-	private static CompanyService companyService = CompanyService.getInstance();
+	@Autowired
+	private static ComputerService computerService;
+	@Autowired
+	private static CompanyService companyService;
+	
 	static Scanner scan =  new Scanner(System.in);
 
 	public static void main(String[] args) throws InvalidDataException {

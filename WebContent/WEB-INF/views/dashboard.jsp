@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<c:url value="/index" />"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<c:url value="/index?numPage=1" />"> Application - Computer Database </a>
         </div>
     </header>
     
@@ -63,8 +63,14 @@
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                        <c:choose>
+                            <c:when test='${ param.search != null || param.search != "" }'>
+                                <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="<c:out value='${ param.search }' />" />
+                            </c:when>
+                            <c:otherwise>
+                                <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                            </c:otherwise>
+                        </c:choose>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>

@@ -2,27 +2,21 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDAO;
 
+@Service
 public class ComputerService {
-
-	private static ComputerService instance;
 
 	private final ComputerDAO computerDao;
 
 	private ComputerService(ComputerDAO computerDAO) {
 		this.computerDao = computerDAO;
-	}
-
-	public static ComputerService getInstance() {
-		if (instance == null) {
-			instance = new ComputerService(ComputerDAO.getInstance());
-		}
-		return instance;
 	}
 
 	public Computer get(Integer id) throws ComputerNotFoundException {

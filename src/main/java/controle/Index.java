@@ -6,16 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
 
+@Controller
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,6 +30,7 @@ public class Index extends HttpServlet {
 	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 	
+	@Autowired
 	private ComputerService instanceService;
 	private Integer nbComputers;
 	private Integer nbPages;
@@ -32,8 +39,13 @@ public class Index extends HttpServlet {
 
     public Index() {
     	super();
-    	instanceService = ComputerService.getInstance();
     	errors = new HashMap<String, String>();
+    }
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+    	super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,7 +66,6 @@ public class Index extends HttpServlet {
 		if (request.getParameter("numPage") != null) {
 			try {
 				Integer i = Integer.parseInt(request.getParameter("numPage"));
-				System.out.println(nbPages);
 				if (i > 0 && i < nbPages + 1) {
 					try {
 						myPage.setCurrentPage(i - 1);

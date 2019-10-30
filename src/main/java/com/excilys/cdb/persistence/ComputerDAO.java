@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.cdb.connection.DBConnection;
 import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
+@Repository
 public class ComputerDAO {
-
-	private static ComputerDAO instance;
 
 	private final ComputerMapper computerMapper;
 
@@ -30,13 +31,6 @@ public class ComputerDAO {
 
 	private ComputerDAO(ComputerMapper computerMapper) {
 		this.computerMapper = computerMapper;
-	}
-
-	public static ComputerDAO getInstance() {
-		if (instance == null) {
-			instance = new ComputerDAO(ComputerMapper.getInstance());
-		}
-		return instance;
 	}
 
 	public Optional<Computer> get(Integer id) {

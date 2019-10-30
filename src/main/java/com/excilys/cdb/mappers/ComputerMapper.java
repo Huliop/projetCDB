@@ -4,22 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerDTO;
 
+@Component
 public class ComputerMapper {
 
-	private static ComputerMapper instance;
-
 	private ComputerMapper() { }
-
-	public static ComputerMapper getInstance() {
-		if (instance == null) {
-			instance = new ComputerMapper();
-		}
-		return instance;
-	}
 
 	public Computer fromResultSet(ResultSet resultSet) throws SQLException {
 		return new Computer.ComputerBuilder().withId(resultSet.getInt(1))

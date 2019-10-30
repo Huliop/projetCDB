@@ -12,6 +12,8 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDAO;
 
 public class TestComputerDAO {
+	
+	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
 
 	@Test
 	public void testGetInstance() {
@@ -47,7 +49,7 @@ public class TestComputerDAO {
 		Page<Computer> pageToTest = new Page<Computer>();
 		pageToTest.setOffset(5);
 		int offset = pageToTest.getOffset();
-		ComputerDAO.getInstance().get(pageToTest);
+		ComputerDAO.getInstance().get(pageToTest, SELECT_ALL, "", false);
 
 		Optional<Computer> computerToTest = Optional.of(new Computer.ComputerBuilder().withId(1).withName("MacBook Pro 15.4 inch").withCompany(new Company.CompanyBuilder().withId(1).withName("Apple Inc.").build()).build());
 
