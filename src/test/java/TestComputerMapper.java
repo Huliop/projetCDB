@@ -9,21 +9,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestComputerMapper {
-
+	
+	@Autowired
+	private ComputerMapper instanceMapper;
 	@Mock
 	private ResultSet resultSet;
-
-	@Test
-	public void testGetInstance() {
-		assertTrue("getInstance devrait toujours renvoyer une instance", ComputerMapper.getInstance() != null);
-	}
-
+	
 	@Test
 	public void testFromResultSet() throws SQLException {
 		Integer myInt = 0;
@@ -34,7 +32,7 @@ public class TestComputerMapper {
 		Mockito.when(resultSet.getDate(3)).thenReturn(introduced);
 		Mockito.when(resultSet.getDate(4)).thenReturn(discontinued);
 
-		Computer computer = ComputerMapper.getInstance().fromResultSet(resultSet);
+		Computer computer = instanceMapper.fromResultSet(resultSet);
 
 		assertNotNull("La compagnie n'a pas été créée..", computer);
 		assertEquals("Le numéro de l'oridnateur créé n'est pas compatible avec celui souhaité", myInt, computer.getId());

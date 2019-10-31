@@ -1,7 +1,7 @@
 package com.excilys.cdb.exceptions;
 
-public class ComputerNotFoundException extends Exception {
-
+public class UnsupportedActionException extends Exception {
+	
 	private static final long serialVersionUID = 1L;
 
 }

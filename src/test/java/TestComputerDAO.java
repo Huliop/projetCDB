@@ -5,26 +5,31 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDAO;
 
+import spring.SpringConfiguration;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {SpringConfiguration.class})
 public class TestComputerDAO {
 	
+	@Autowired
+	private ComputerDAO instanceDAO;
 	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-
-	@Test
-	public void testGetInstance() {
-		assertTrue("getInstance devrait toujours renvoyer une instance", ComputerDAO.getInstance() != null);
-	}
 
 	@Test
 	public void testGetById() {
 		Optional<Computer> computerToTest = Optional.of(new Computer.ComputerBuilder().withId(1).withName("MacBook Pro 15.4 inch").withCompany(new Company.CompanyBuilder().withId(1).withName("Apple Inc.").build()).build());
 		Optional<Computer> computerToTestFalse = Optional.of(new Computer.ComputerBuilder().withId(1).withName("CM-2a").build());
-		Optional<Computer> computer = ComputerDAO.getInstance().get(1);
+		Optional<Computer> computer = instanceDAO.get(1);
 
 		assertTrue("La méthode get(int) de ComputerDAO ne retourne pas de compagnies", computer != null);
 
@@ -37,7 +42,7 @@ public class TestComputerDAO {
 		final int nbRowsTest =	7;
 		Optional<Computer> computerToTest = Optional.of(new Computer.ComputerBuilder().withId(1).withName("MacBook Pro 15.4 inch").withCompany(new Company.CompanyBuilder().withId(1).withName("Apple Inc.").build()).build());
 
-		List<Computer> lComputer = ComputerDAO.getInstance().get();
+		List<Computer> lComputer = instanceDAO.get();
 
 		assertTrue("La méthode get de CompanyDAO ne retourne pas de computers", lComputer != null);
 		assertEquals("La méthode get de CompanyDAO ne renvoie pas la bonne liste (longueur erronnée)", nbRowsTest, lComputer.size());
@@ -49,7 +54,7 @@ public class TestComputerDAO {
 		Page<Computer> pageToTest = new Page<Computer>();
 		pageToTest.setOffset(5);
 		int offset = pageToTest.getOffset();
-		ComputerDAO.getInstance().get(pageToTest, SELECT_ALL, "", false);
+		instanceDAO.get(pageToTest, SELECT_ALL, "", false);
 
 		Optional<Computer> computerToTest = Optional.of(new Computer.ComputerBuilder().withId(1).withName("MacBook Pro 15.4 inch").withCompany(new Company.CompanyBuilder().withId(1).withName("Apple Inc.").build()).build());
 
@@ -62,13 +67,11 @@ public class TestComputerDAO {
 
 	@Test
 	public void testCreate() {
-		ComputerDAO instance = ComputerDAO.getInstance();
-
-		List<Computer> lComputerAvant = instance.get();
+		List<Computer> lComputerAvant = instanceDAO.get();
 		int nbAvant = lComputerAvant.size();
 
 		try {
-			instance.create(new Computer.ComputerBuilder().
+			instanceDAO.create(new Computer.ComputerBuilder().
 					withName("PC-BG").
 					withIntroduced(LocalDate.parse("2011-11-11")).
 					withDiscontinued(LocalDate.parse("2012-11-11")).
@@ -80,14 +83,16 @@ public class TestComputerDAO {
 			e.printStackTrace();
 		}
 
-		List<Computer> lComputerApres = instance.get();
-		
-		instance.get().stream().forEach(System.out::println);
+		List<Computer> lComputerApres = instanceDAO.get();
 		
 		int nbApres = lComputerApres.size();
 
 		assertEquals("Le nombre d'ordinateur n'a pas augmenté, pas créé.. ?", nbAvant + 1, nbApres);
-		assertEquals("L'ID de l'ordinateur créé n'a pas été correctement incrémenté de 1", lComputerApres.get(nbAvant - 1).getId(), Integer.valueOf(lComputerApres.get(nbApres - 1).getId() + 1));
+		assertEquals("L'ID de l'ordinateur créé n'a pas été correctement incrémenté de 1", lComputerApres.get(nbApres - 1).getId(), Integer.valueOf(lComputerApres.get(nbApres - 2).getId() + 1));
+		assertEquals("Le nom de l'ordinateur créé n'est pas le même que celui souhaité", lComputerApres.get(nbApres - 1).getName(), "PC-BG");
+		assertEquals("La date d'introduction de l'ordinateur créé n'est pas la même que celle souhaitée", lComputerApres.get(nbApres - 1).getIntroduced(), LocalDate.parse("2011-11-11"));
+		assertEquals("La date d'arrêt de l'ordinateur créé n'est pas le même que celle souhaitée", lComputerApres.get(nbApres - 1).getDiscontinued(), LocalDate.parse("2012-11-11"));
+		assertEquals("L'id de la compagnie créée n'est pas le même que celui souhaité", lComputerApres.get(nbApres - 1).getCompany().getId(), Integer.valueOf(1));
 	}
 
 	@Test

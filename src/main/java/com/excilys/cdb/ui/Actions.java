@@ -3,6 +3,8 @@ package com.excilys.cdb.ui;
 import java.util.Arrays;
 import java.util.List;
 
+import com.excilys.cdb.exceptions.UnsupportedActionException;
+
 public enum Actions {
 	LIST_ALL_COMPUTERS(1, "Lister tous les ordinateurs"),
 	LIST_ALL_COMPANIES(2, "Lister toutes les entreprises"),

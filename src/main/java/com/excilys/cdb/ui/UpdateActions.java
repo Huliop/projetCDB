@@ -3,6 +3,8 @@ package com.excilys.cdb.ui;
 import java.util.Arrays;
 import java.util.List;
 
+import com.excilys.cdb.exceptions.UnsupportedActionException;
+
 public enum UpdateActions {
 	NAME(1, "Nom"),
 	INTRODUCED(2, "Introduced"),
