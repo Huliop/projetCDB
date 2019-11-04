@@ -48,7 +48,7 @@ public class ComputerService {
 			throw new InvalidDataException("You must give a valid date");
 		}
 	}
-	
+
 	public List<Computer> search(String pattern) {
 		return computerDao.search(pattern);
 	}

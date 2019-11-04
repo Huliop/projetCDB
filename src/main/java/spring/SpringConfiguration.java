@@ -17,17 +17,17 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 @ComponentScan(basePackages = { "com.excilys.cdb", "controle" })
 @PropertySource("classpath:application.properties")
 public class SpringConfiguration extends AbstractContextLoaderInitializer {
-	
+
 	@Autowired
 	private Environment env;
-	
+
     @Override
     protected WebApplicationContext createRootApplicationContext() {
     AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
     rootContext.register(SpringConfiguration.class);
     return rootContext;
     }
-    
+
     @Bean
  	public DataSource getConnection() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();

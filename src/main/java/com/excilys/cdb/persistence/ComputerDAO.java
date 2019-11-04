@@ -20,7 +20,7 @@ import com.excilys.cdb.model.Page;
 
 @Repository
 public class ComputerDAO {
-	
+
 	@Autowired
 	private DBConnection dbConnection;
 
@@ -32,7 +32,7 @@ public class ComputerDAO {
 	private final String DELETE = "DELETE FROM computer WHERE id = ?";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-	
+
 	private ComputerDAO(ComputerMapper computerMapper) {
 		this.computerMapper = computerMapper;
 	}
@@ -120,13 +120,13 @@ public class ComputerDAO {
 			System.out.println("Error deleting computer : " + e.getMessage());
 		}
 	}
-	
+
 	public List<Computer> search(String pattern) {
 		List<Computer> result = new ArrayList<>();
 		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(SEARCH)) {
 			stmt.setString(1, "%" + pattern + "%");
 			stmt.setString(2, "%" + pattern + "%");
-			
+
 			ResultSet resultSet = stmt.executeQuery();
 
 			while (resultSet.next()) {

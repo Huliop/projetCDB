@@ -39,16 +39,16 @@ public class AddComputer extends HttpServlet {
     private ComputerMapper  instanceMapper;
     @Autowired
     private FieldsValidator instanceValidator;
-    
+
     private List<Company> companies;
     private boolean success;
     private Map<String, String> errors;
-     
+
     @Autowired public AddComputer() {
         super();
 		errors = new HashMap<String, String>();
     }
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);
@@ -56,7 +56,7 @@ public class AddComputer extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		companies = instanceCompany.get();
 		request.setAttribute("companies", companies);
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);

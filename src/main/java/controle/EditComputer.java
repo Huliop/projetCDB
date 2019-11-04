@@ -31,7 +31,7 @@ public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VUE = "/WEB-INF/views/editComputer.jsp";
     private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
-    
+
     @Autowired
     private ComputerService instanceService;
     @Autowired
@@ -40,7 +40,7 @@ public class EditComputer extends HttpServlet {
     private FieldsValidator instanceValidator;
     @Autowired
     private CompanyService instanceCompany;
-    
+
     private List<Company> companies;
     private Map<String, String> errors;
 
@@ -48,7 +48,7 @@ public class EditComputer extends HttpServlet {
         super();
 		errors = new HashMap<String, String>();
     }
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);

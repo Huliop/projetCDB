@@ -17,7 +17,7 @@ import com.excilys.cdb.model.Company;
 
 @Repository
 public class CompanyDAO {
-	
+
 	@Autowired
 	private DBConnection dbConnection;
 

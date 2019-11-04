@@ -99,31 +99,30 @@ public class Index extends HttpServlet {
 			this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
 		}
 	}
-	
-	private void updatePages(HttpServletRequest request, HttpServletResponse response, List<Computer> list, boolean isSearch) 
+
+	private void updatePages(HttpServletRequest request, HttpServletResponse response, List<Computer> list, boolean isSearch)
 			throws ServletException, IOException {
-		
+
 		nbComputers = list.size();
-		
+
 		updateNumPage(request, response);
 
 		if (request.getParameter("offset") != null) {
 			updateOffset(request, response);
 		}
-		
+
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
-		
+
 		if (isSearch) {
 			instanceService.get(myPage, SEARCH, request.getParameter("search"), true);
-		}
-		else {
+		} else {
 			instanceService.get(myPage, SELECT_ALL, "", false);
 		}
-		
+
 		List<Computer> computers = myPage.getElements();
 		int numPages = myPage.getCurrentPage() + 1;
 		List<String> navFooter = this.getNavFooter(myPage.getCurrentPage());
-		
+
 		request.setAttribute("computers", computers);
 		request.setAttribute("nbComputers", nbComputers);
 		request.setAttribute("navFooter", navFooter);
@@ -131,7 +130,7 @@ public class Index extends HttpServlet {
 	}
 
 	private void delete(HttpServletRequest request, HttpServletResponse response, String param) throws IOException, ServletException {
-		if(param.length() > 0) {
+		if (param.length() > 0) {
 			String[] lCleanCompSelected = param.split(",");
 			int length = lCleanCompSelected.length;
 
@@ -145,7 +144,7 @@ public class Index extends HttpServlet {
 					doGet(request, response);
 				}
 			}
-			
+
 			int nPage = (myPage.getElements().size() != length ? myPage.getCurrentPage() + 1 : myPage.getCurrentPage());
 			response.sendRedirect("index?successDelete=true&numPage=" + nPage + "&length=" + length);
 		} else {
@@ -154,13 +153,13 @@ public class Index extends HttpServlet {
 			doGet(request, response);
 		}
 	}
-	
+
 	private List<Computer> search(HttpServletRequest request, HttpServletResponse response, String param) {
 		if (param.length() > 0) {
 			try {
 				List<Computer> lComputer = instanceService.search(param);
 				return lComputer;
-			} catch (Exception e){
+			} catch (Exception e) {
 				errors.put("errorDeleting", "A problem has occured while searching the matching computers with this pattern.. Try again");
 			}
 		}

@@ -21,7 +21,7 @@ public class CDB {
 	private static ComputerService computerService;
 	@Autowired
 	private static CompanyService companyService;
-	
+
 	static Scanner scan =  new Scanner(System.in);
 
 	public static void main(String[] args) throws InvalidDataException {
