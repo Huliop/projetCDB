@@ -32,7 +32,7 @@ public class ComputerDAO {
 	private final String DELETE = "DELETE FROM computer WHERE id = ?";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-
+	
 	private ComputerDAO(ComputerMapper computerMapper) {
 		this.computerMapper = computerMapper;
 	}
