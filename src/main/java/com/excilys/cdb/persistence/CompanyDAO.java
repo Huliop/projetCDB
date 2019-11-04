@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.connection.DBConnection;
@@ -16,6 +17,9 @@ import com.excilys.cdb.model.Company;
 
 @Repository
 public class CompanyDAO {
+	
+	@Autowired
+	private DBConnection dbConnection;
 
 	private static final String SELECT_ALL = "SELECT id, name FROM company";
 	private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
@@ -28,7 +32,7 @@ public class CompanyDAO {
 
 	public Optional<Company> get(Integer id) {
 		Optional<Company> company = Optional.empty();
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(SELECT_BY_ID)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(SELECT_BY_ID)) {
 			stmt.setInt(1, id);
 			ResultSet resultSet = stmt.executeQuery();
 			if (resultSet.next()) {
@@ -43,7 +47,7 @@ public class CompanyDAO {
 
 	public List<Company> get() {
 		List<Company> result = new ArrayList<>();
-		try (Statement stmt = DBConnection.getConnection().createStatement()) {
+		try (Statement stmt = dbConnection.getConnection().createStatement()) {
 			ResultSet resultSet = stmt.executeQuery(SELECT_ALL);
 
 			while (resultSet.next()) {

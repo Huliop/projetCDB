@@ -1,6 +1,0 @@
-jdbcUrl = jdbc:h2:mem:mydb;INIT=RUNSCRIPT FROM 'src/test/resources/init_mydb.sql'
-dataSource.user=admincdb
-dataSource.password=qwerty1234
-dataSource.cachePrepStmts=true
-dataSource.prepStmtCacheSize=250
-dataSource.prepStmtCacheSqlLimit=2048

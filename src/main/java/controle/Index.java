@@ -36,7 +36,7 @@ public class Index extends HttpServlet {
 	private Integer nbPages;
 	private Map<String, String> errors;
 	Page<Computer> myPage = new Page<Computer>();
-
+	
     public Index() {
     	super();
     	errors = new HashMap<String, String>();
@@ -49,7 +49,6 @@ public class Index extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		if (request.getParameter("search") != null && request.getParameter("search") != "") {
 			updatePages(request, response, search(request, response, request.getParameter("search")), true);
 		} else {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.connection.DBConnection;
@@ -19,6 +20,9 @@ import com.excilys.cdb.model.Page;
 
 @Repository
 public class ComputerDAO {
+	
+	@Autowired
+	private DBConnection dbConnection;
 
 	private final ComputerMapper computerMapper;
 
@@ -35,7 +39,7 @@ public class ComputerDAO {
 
 	public Optional<Computer> get(Integer id) {
 		Optional<Computer> computer = Optional.empty();
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(SELECT_BY_ID)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(SELECT_BY_ID)) {
 			stmt.setInt(1, id);
 			ResultSet resultSet = stmt.executeQuery();
 			if (resultSet.next()) {
@@ -49,7 +53,7 @@ public class ComputerDAO {
 
 	public List<Computer> get() {
 		List<Computer> result = new ArrayList<>();
-		try (Statement stmt = DBConnection.getConnection().createStatement()) {
+		try (Statement stmt = dbConnection.getConnection().createStatement()) {
 			ResultSet resultSet = stmt.executeQuery(SELECT_ALL);
 
 			while (resultSet.next()) {
@@ -62,7 +66,7 @@ public class ComputerDAO {
 	}
 
 	public void get(Page<Computer> page, String query, String pattern, boolean isSearch) {
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(query + " LIMIT " + page.getFirstLimit() + "," + page.getOffset())) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(query + " LIMIT " + page.getFirstLimit() + "," + page.getOffset())) {
 			if (isSearch) {
 				stmt.setString(1, "%" + pattern + "%");
 				stmt.setString(2, "%" + pattern + "%");
@@ -83,7 +87,7 @@ public class ComputerDAO {
 	}
 
 	public void create(Computer computer) throws Exception {
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
 			setStatementParameters(computer, stmt);
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -97,7 +101,7 @@ public class ComputerDAO {
 	}
 
 	public void update(Computer computer) throws InvalidDataException {
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(UPDATE)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(UPDATE)) {
 			setStatementParameters(computer, stmt);
 			stmt.setInt(5, computer.getId());
 			stmt.executeUpdate();
@@ -108,7 +112,7 @@ public class ComputerDAO {
 	}
 
 	public void delete(int computerId) {
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(DELETE)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(DELETE)) {
 			stmt.setInt(1, computerId);
 
 			stmt.executeUpdate();
@@ -119,7 +123,7 @@ public class ComputerDAO {
 	
 	public List<Computer> search(String pattern) {
 		List<Computer> result = new ArrayList<>();
-		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(SEARCH)) {
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(SEARCH)) {
 			stmt.setString(1, "%" + pattern + "%");
 			stmt.setString(2, "%" + pattern + "%");
 			

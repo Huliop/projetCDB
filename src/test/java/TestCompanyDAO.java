@@ -3,7 +3,6 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +25,6 @@ public class TestCompanyDAO {
 	
 	@Autowired
 	private CompanyDAO instanceDAO;
-
-	@BeforeClass
-	public static void beforeAll() {
-	}
 
 	@Test
 	public void testGetById() {

@@ -2,31 +2,23 @@ package com.excilys.cdb.connection;
 
 import java.sql.SQLException;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 
+@Component
 public class DBConnection {
-
-	private static HikariConfig config = new HikariConfig("/DBProperties");
-    private static HikariDataSource ds = new HikariDataSource(config);
-
-	public static DBConnection instance;
+	@Autowired
+	private DataSource ds;
 
 	private DBConnection() { }
 
 	private static Connection instanceConnection;
 
-	public static DBConnection getInstance() {
-		if (instance == null) {
-			instance = new DBConnection();
-		}
-
-		return instance;
-	}
-
-	public static Connection getConnection() {
+	public Connection getConnection() {
 		if (instanceConnection == null) {
 			try {
 				instanceConnection = ds.getConnection();
