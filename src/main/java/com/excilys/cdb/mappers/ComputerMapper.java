@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.Company;
@@ -11,21 +12,9 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerDTO;
 
 @Component
-public class ComputerMapper {
+public class ComputerMapper implements RowMapper<Computer> {
 
-	private ComputerMapper() { }
-
-	public Computer fromResultSet(ResultSet resultSet) throws SQLException {
-		return new Computer.ComputerBuilder().withId(resultSet.getInt(1))
-				.withName(resultSet.getString(2))
-				.withIntroduced(resultSet.getDate(3) != null ? resultSet.getDate(3).toLocalDate() : null)
-				.withDiscontinued(resultSet.getDate(4) != null ? resultSet.getDate(4).toLocalDate() : null)
-				.withCompany(new Company.CompanyBuilder()
-										.withId(resultSet.getInt(5))
-										.withName(resultSet.getString(6))
-										.build())
-				.build();
-	}
+	public ComputerMapper() { }
 
 	public Computer fromComputerDTO(ComputerDTO computer) {
 		return new Computer.ComputerBuilder().withId(computer.getId())
@@ -36,6 +25,19 @@ public class ComputerMapper {
 						.withId(computer.getCompanyId())
 						.withName(computer.getCompanyName())
 						.build())
+				.build();
+	}
+	
+	@Override
+	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return new Computer.ComputerBuilder().withId(rs.getInt(1))
+				.withName(rs.getString(2))
+				.withIntroduced(rs.getDate(3) != null ? rs.getDate(3).toLocalDate() : null)
+				.withDiscontinued(rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null)
+				.withCompany(new Company.CompanyBuilder()
+										.withId(rs.getInt(5))
+										.withName(rs.getString(6))
+										.build())
 				.build();
 	}
 }

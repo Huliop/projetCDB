@@ -1,60 +1,52 @@
 package com.excilys.cdb.persistence;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.connection.DBConnection;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
 @Repository
 public class CompanyDAO {
-
-	@Autowired
-	private DBConnection dbConnection;
+	
+	private JdbcTemplate jdbcTemplate;
 
 	private static final String SELECT_ALL = "SELECT id, name FROM company";
 	private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
-
-	private final CompanyMapper companyMapper;
-
-	public CompanyDAO(CompanyMapper companyMapper) {
-		this.companyMapper = companyMapper;
+	private static final Logger log = LoggerFactory.getLogger(CompanyDAO.class);
+	
+	@Autowired
+	public CompanyDAO(DataSource ds) {
+		jdbcTemplate = new JdbcTemplate(ds);
 	}
 
 	public Optional<Company> get(Integer id) {
-		Optional<Company> company = Optional.empty();
-		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(SELECT_BY_ID)) {
-			stmt.setInt(1, id);
-			ResultSet resultSet = stmt.executeQuery();
-			if (resultSet.next()) {
-				company = Optional.of(companyMapper.fromResultSet(resultSet));
-			}
-		} catch (SQLException e) {
-			System.out.println("Error getting company by id : " + e.getMessage());
+		Company company = null;
+		try {
+			company = (Company) jdbcTemplate.query(SELECT_BY_ID, new Object[] { id }, new CompanyMapper());
+		} catch (DataAccessException e) {
+			log.error("Error getting company by id : " + e.getMessage());
 		}
 
-		return company;
+		return Optional.of(company);
 	}
 
 	public List<Company> get() {
 		List<Company> result = new ArrayList<>();
-		try (Statement stmt = dbConnection.getConnection().createStatement()) {
-			ResultSet resultSet = stmt.executeQuery(SELECT_ALL);
-
-			while (resultSet.next()) {
-				result.add(companyMapper.fromResultSet(resultSet));
-			}
-		} catch (SQLException e) {
-			System.out.println("Error getting all companies : " + e.getMessage());
+		try {
+			result = (List<Company>) jdbcTemplate.query(SELECT_ALL, new CompanyMapper());
+		} catch (DataAccessException e) {
+			log.error("Error getting all companies : " + e.getMessage());
 		}
 		return result;
 	}

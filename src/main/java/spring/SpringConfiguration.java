@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 @Configuration
-@ComponentScan(basePackages = { "com.excilys.cdb", "controle" })
+@ComponentScan(basePackages = { "com.excilys.cdb.mappers", "com.excilys.cdb.service", "com.excilys.cdb.persistence", "controle" })
 @PropertySource("classpath:application.properties")
 public class SpringConfiguration extends AbstractContextLoaderInitializer {
 

@@ -37,7 +37,7 @@ public class TestCompanyMapper {
 		Mockito.when(resultSet.getInt(1)).thenReturn(myInt);
 		Mockito.when(resultSet.getString(2)).thenReturn("myString");
 
-		Company company = instanceMapper.fromResultSet(resultSet);
+		Company company = instanceMapper.mapRow(resultSet, 0);
 
 		assertNotNull("La compagnie n'a pas été créée..", company);
 		assertEquals("Le numéro de la compagnie créée n'est pas compatible avec celui souhaité", myInt, company.getId());

@@ -4,18 +4,28 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
-@RunWith(MockitoJUnitRunner.class)
+import spring.SpringConfiguration;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {SpringConfiguration.class})
 public class TestComputerMapper {
+	
+	@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 	
 	@Autowired
 	private ComputerMapper instanceMapper;
@@ -32,7 +42,7 @@ public class TestComputerMapper {
 		Mockito.when(resultSet.getDate(3)).thenReturn(introduced);
 		Mockito.when(resultSet.getDate(4)).thenReturn(discontinued);
 
-		Computer computer = instanceMapper.fromResultSet(resultSet);
+		Computer computer = instanceMapper.mapRow(resultSet, 0);
 
 		assertNotNull("La compagnie n'a pas été créée..", computer);
 		assertEquals("Le numéro de l'oridnateur créé n'est pas compatible avec celui souhaité", myInt, computer.getId());
