@@ -13,15 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.CompanyDAO;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
@@ -36,7 +33,7 @@ public class Index extends HttpServlet {
 	@Autowired
 	private ComputerService instanceService;
 	private Integer nbComputers;
-	private Integer nbPages;
+	private Integer nbPages = 0;
 	private Map<String, String> errors;
 	Page<Computer> myPage = new Page<Computer>();
 
@@ -81,7 +78,7 @@ public class Index extends HttpServlet {
 				this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
 			}
 		} else {
-			if (nbPages != null) {
+			if (nbPages > 0) {
 				double newPage = (myPage.getCurrentPage() + 1) * ((double) (nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1)) / (double) nbPages);
 				myPage.setCurrentPage((int) newPage - 1);
 			} else {
@@ -115,7 +112,7 @@ public class Index extends HttpServlet {
 		}
 
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
-
+		
 		if (isSearch) {
 			instanceService.get(myPage, SEARCH, request.getParameter("search"), true);
 		} else {

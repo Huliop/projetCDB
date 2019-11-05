@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO">
+<Configuration>
+ 
+<!-- Author:  Crunchify.com  -->
     <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout
-                pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{[%-5level %d{yyyy-MM-dd HH:mm:ss.SSS}]}{ERROR = red bright, WARN = yellow bright, DEBUG = cyan bright} [%t] %style{%c{1}}{bright,magenta} - %style{%msg%n}{green, bright}" disableAnsi="false"/>
         </Console>
+ 
     </Appenders>
     <Loggers>
-        <Root level="error" additivity="false">
-            <AppenderRef ref="console" />
+        <Root level="debug">
+            <AppenderRef ref="Console" />
         </Root>
     </Loggers>
 </Configuration>
