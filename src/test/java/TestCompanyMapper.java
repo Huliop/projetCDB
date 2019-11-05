@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
-import spring.SpringConfiguration;
+import configuration.SpringConfiguration;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

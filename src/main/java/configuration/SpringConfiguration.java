@@ -1,4 +1,4 @@
-package spring;
+package configuration;
 
 import javax.sql.DataSource;
 
