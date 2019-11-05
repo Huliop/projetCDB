@@ -4,12 +4,12 @@
 <Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%highlight{[%-5level %d{yyyy-MM-dd HH:mm:ss.SSS}]}{ERROR = red bright, WARN = yellow bright, DEBUG = cyan bright} [%t] %style{%c{1}}{bright,magenta} - %msg%n" disableAnsi="false"/>
+            <PatternLayout pattern="%highlight{[%-5level %d{yyyy-MM-dd HH:mm:ss.SSS}]}{ERROR = red bright light, WARN = yellow bright, DEBUG = cyan bright} [%t] %style{%c{1}}{bright,magenta} - %msg%n" disableAnsi="false"/>
         </Console>
  
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="warn">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>

@@ -25,7 +25,7 @@ import com.excilys.cdb.service.ComputerService;
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String VUE = "/WEB-INF/views/dashboard.jsp";
+	public static final String VUE = "/WEB-INF/views/index.jsp";
 	public static final String ERROR500 = "/WEB-INF/views/500.jsp";
 	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
