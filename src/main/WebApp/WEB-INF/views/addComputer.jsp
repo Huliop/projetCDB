@@ -7,9 +7,12 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href='<c:url value="/resources/css/bootstrap.min.css" />' rel="stylesheet" media="screen">
-<link href='<c:url value="/resources/css/font-awesome.css" />' rel="stylesheet" media="screen">
-<link href='<c:url value="/resources/css/main.css" />' rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/bootstrap.min.css" />'
+	rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/font-awesome.css" />'
+	rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/main.css" />' rel="stylesheet"
+	media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -98,10 +101,19 @@
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="company">
 									<option value="0" selected>--</option>
-									<c:forEach var="comp" items="${ requestScope.companies }">
-										<option value="${ comp.id }"
-											<c:if test="${ comp.id == param.company }">selected</c:if>>${ comp.name }</option>
-									</c:forEach>
+									<c:choose>
+										<c:when test='${ s != "false" }'>
+											<c:forEach var="comp" items="${ requestScope.companies }">
+												<option value="${ comp.id }"
+													<c:if test="${ comp.id == param.company }">selected</c:if>>${ comp.name }</option>
+											</c:forEach>>
+	                                    </c:when>
+										<c:otherwise>
+											<c:forEach var="comp" items="${ requestScope.companies }">
+												<option value="${ comp.id }">${ comp.name }</option>
+											</c:forEach>>
+	                                    </c:otherwise>
+									</c:choose>
 								</select>
 							</div>
 						</fieldset>
@@ -119,9 +131,10 @@
 	</section>
 
 	<script src='<c:url value="/resources/js/jquery.min.js" />'></script>
-    <script src='<c:url value="/resources/js/bootstrap.min.js" />'></script>
-    <script src='<c:url value="/resources/js/verifFields.js" />'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src='<c:url value="/resources/js/bootstrap.min.js" />'></script>
+	<script src='<c:url value="/resources/js/verifFields.js" />'></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
 </body>
 </html>

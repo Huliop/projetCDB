@@ -39,12 +39,7 @@ public class EditComputer {
     @Autowired
     private CompanyService instanceCompany;
 
-    private Map<String, String> errors;
-
-    public EditComputer() {
-        super();
-		errors = new HashMap<String, String>();
-    }
+    private Map<String, String> errors = new HashMap<String, String>();
     
     @RequestMapping(value = "/editComputer", method = RequestMethod.GET)
     public ModelAndView getEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

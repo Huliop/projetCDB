@@ -35,12 +35,7 @@ public class AddComputer {
     private FieldsValidator instanceValidator;
 
     private boolean success;
-    private Map<String, String> errors;
-
-    @Autowired public AddComputer() {
-        super();
-		errors = new HashMap<String, String>();
-    }
+    private Map<String, String> errors = new HashMap<String, String>();
     
     @RequestMapping(value = "/addComputer", method = RequestMethod.GET)
     public ModelAndView getAdd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.model.Computer;
@@ -33,20 +34,20 @@ public class Index {
 	Page<Computer> myPage = new Page<Computer>();
 
 	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
-	public ModelAndView getIndex(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("search") != null && request.getParameter("search") != "") {
-			updatePages(request, response, search(request, response, request.getParameter("search")), true);
+	public ModelAndView getIndex(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "search", required = false) String search) throws ServletException, IOException {
+		if (search != null && search != "") {
+			updatePages(request, response, search(request, response, search), true);
 		} else {
 			updatePages(request, response, instanceService.get(), false);
 		}
 		return new ModelAndView("index");
 	}
-	
+
 	@RequestMapping(value = "/index", method = RequestMethod.POST)
-	public void postIndex(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		delete(request, response, request.getParameter("selection"));
+	public void postIndex(HttpServletRequest request, HttpServletResponse response, @RequestParam("selection") String selection) throws IOException, ServletException {
+		delete(request, response, selection);
 	}
-	
+
 	@RequestMapping("/500")
 	public ModelAndView error500() {
 		return new ModelAndView("500");
@@ -137,7 +138,7 @@ public class Index {
 				} catch (Exception e) {
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
 					request.setAttribute("errors", errors);
-					getIndex(request, response);
+					getIndex(request, response, null);
 				}
 			}
 
@@ -146,7 +147,7 @@ public class Index {
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
 			request.setAttribute("errors", errors);
-			getIndex(request, response);
+			getIndex(request, response, null);
 		}
 	}
 
