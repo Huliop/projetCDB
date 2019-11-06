@@ -34,23 +34,30 @@ public class Index {
 	Page<Computer> myPage = new Page<Computer>();
 
 	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
-	public ModelAndView getIndex(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "search", required = false) String search) throws ServletException, IOException {
+	public ModelAndView getIndex(HttpServletRequest request, HttpServletResponse response, 
+			@RequestParam(value = "search", required = false) String search) throws ServletException, IOException {
 		if (search != null && search != "") {
-			updatePages(request, response, search(request, response, search), true);
+			updatePages(request, response, search(request, response, search), search, true);
 		} else {
-			updatePages(request, response, instanceService.get(), false);
+			updatePages(request, response, instanceService.get(), null, false);
 		}
 		return new ModelAndView("index");
 	}
 
 	@RequestMapping(value = "/index", method = RequestMethod.POST)
-	public void postIndex(HttpServletRequest request, HttpServletResponse response, @RequestParam("selection") String selection) throws IOException, ServletException {
-		delete(request, response, selection);
+	public void postIndex(HttpServletRequest request, HttpServletResponse response, 
+			@RequestParam(value = "selection", required = false) String selection, @RequestParam(value = "search", required = false) String search)
+					throws IOException, ServletException {
+		delete(request, response, selection, search);
 	}
 
-	@RequestMapping("/500")
 	public ModelAndView error500() {
 		return new ModelAndView("500");
+	}
+	
+	@RequestMapping("/*")
+	public ModelAndView error404() {
+		return new ModelAndView("404");
 	}
 
 	private void updateNumPage(HttpServletRequest request, HttpServletResponse response)
@@ -98,7 +105,7 @@ public class Index {
 	}
 
 	private void updatePages(HttpServletRequest request, HttpServletResponse response, List<Computer> list,
-			boolean isSearch) throws ServletException, IOException {
+			String search, boolean isSearch) throws ServletException, IOException {
 
 		nbComputers = list.size();
 
@@ -111,7 +118,7 @@ public class Index {
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
 
 		if (isSearch) {
-			instanceService.get(myPage, SEARCH, request.getParameter("search"), true);
+			instanceService.get(myPage, SEARCH, search, true);
 		} else {
 			instanceService.get(myPage, SELECT_ALL, "", false);
 		}
@@ -126,7 +133,7 @@ public class Index {
 		request.setAttribute("numPages", numPages);
 	}
 
-	private void delete(HttpServletRequest request, HttpServletResponse response, String param)
+	private void delete(HttpServletRequest request, HttpServletResponse response, String param, String search)
 			throws IOException, ServletException {
 		if (param.length() > 0) {
 			String[] lCleanCompSelected = param.split(",");
@@ -138,16 +145,17 @@ public class Index {
 				} catch (Exception e) {
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
 					request.setAttribute("errors", errors);
-					getIndex(request, response, null);
+					getIndex(request, response, search);
 				}
 			}
 
 			int nPage = (myPage.getElements().size() != length ? myPage.getCurrentPage() + 1 : myPage.getCurrentPage());
-			response.sendRedirect("index?successDelete=true&numPage=" + nPage + "&length=" + length);
+			
+			response.sendRedirect("index?successDelete=true&numPage=" + nPage + "&length=" + length + (search != null ? "&search=" + search : ""));
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
 			request.setAttribute("errors", errors);
-			getIndex(request, response, null);
+			getIndex(request, response, search);
 		}
 	}
 

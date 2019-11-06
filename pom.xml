@@ -6,17 +6,17 @@
 	<artifactId>appCDB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-    
-    <properties>
-        <mysql.version>8.0.13</mysql.version>
-        <junit.version>4.12</junit.version>
-        <mockito.version>1.10.19</mockito.version>
-        <h2.version>1.4.197</h2.version>
-        <jstl.version>1.2</jstl.version>
-        <log4j.version>2.11.1</log4j.version>
-        <spring.version>5.2.0.RELEASE</spring.version>
-    </properties>
-    
+
+	<properties>
+		<mysql.version>8.0.13</mysql.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.10.19</mockito.version>
+		<h2.version>1.4.197</h2.version>
+		<jstl.version>1.2</jstl.version>
+		<log4j.version>2.11.1</log4j.version>
+		<spring.version>5.2.0.RELEASE</spring.version>
+	</properties>
+
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
@@ -69,6 +69,14 @@
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 		<dependency>
 			<groupId>org.springframework</groupId>

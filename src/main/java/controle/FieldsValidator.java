@@ -3,44 +3,45 @@ package controle;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.ComputerDTO;
 
 @Component
 public class FieldsValidator {
-	private static final String CHAMP_COMPUTER_NAME      = "computerName";
-    private static final String CHAMP_INTRODUCED_DATE    = "introducedDate";
-    private static final String CHAMP_DISCONTINUED_DATE  = "discontinuedDate";
-    private static final String CHAMP_COMPANY_ID         = "company";
+	private static final String CHAMP_COMPUTER_ID = "id";
+	private static final String CHAMP_COMPUTER_NAME = "computerName";
+	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
+	
 
-	public ComputerDTO createFromRequest(HttpServletRequest request, Map<String, String> errors, boolean isEdit) {
-		String computerName     = getValeurChamp(request, CHAMP_COMPUTER_NAME, errors);
-		String introducedDate   = getValeurChamp(request, CHAMP_INTRODUCED_DATE, errors);
-		String discontinuedDate = getValeurChamp(request, CHAMP_DISCONTINUED_DATE, errors);
-		String companyId        = getValeurChamp(request, CHAMP_COMPANY_ID, errors);
+	public ComputerDTO createFromRequest(Map<String, String> errors, boolean isEdit, String idComputer,
+			String computerName, String introducedDate, String discontinuedDate, String companyId) {
 		Integer id = 0;
+		idComputer       = verifNull(idComputer);
+		computerName     = verifNull(computerName);
+		introducedDate   = verifNull(introducedDate);
+		discontinuedDate = verifNull(discontinuedDate);
+		companyId        = verifNull(companyId);
 
-		if (isEdit) {
-			id = Integer.valueOf(request.getParameter("idComputer"));
-		}
-
+		// On vérifie que les dates sont au bon format, puis si elles le sont qu'elles
+		// sont dans le bon ordre
 		verifDate(introducedDate, errors);
 		verifDate(discontinuedDate, errors);
-
-		if (errors.size() > 0) {
+		if (errors.isEmpty()) {
 			verifOrdreDate(introducedDate, discontinuedDate, errors);
 		}
 
-		if (errors.size() == 0) {
-			ComputerDTO  comp = new ComputerDTO.ComputerDTOBuilder()
-					.withName(computerName)
+		assertNameNotEmpty(computerName, errors);
+
+		if (isEdit) {
+			id = assertIdComputerValid(idComputer, errors);
+		}
+		
+		if (errors.isEmpty()) {
+			ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder().withName(computerName)
 					.withCompanyId(Integer.valueOf(companyId) != 0 ? Integer.valueOf(companyId) : null)
 					.withIntroduced(introducedDate != null ? introducedDate : null)
-					.withDiscontinued(discontinuedDate != null ? discontinuedDate : null)
-					.build();
+					.withDiscontinued(discontinuedDate != null ? discontinuedDate : null).build();
 			if (!isEdit) {
 				return comp;
 			} else {
@@ -49,6 +50,21 @@ public class FieldsValidator {
 			}
 		} else {
 			return null;
+		}
+	}
+
+	public void assertNameNotEmpty(String name, Map<String, String> errors) {
+		if (name == null || name == "") {
+			errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
+		}
+	}
+
+	public Integer assertIdComputerValid(String id, Map<String, String> errors) {
+		try {
+			return Integer.valueOf(id);
+		} catch (NumberFormatException e) {
+			errors.put(CHAMP_COMPUTER_ID, "You must give a valid id");
+			return Integer.valueOf(0);
 		}
 	}
 
@@ -65,20 +81,17 @@ public class FieldsValidator {
 	public void verifOrdreDate(String introduced, String discontinued, Map<String, String> errors) {
 		if (introduced != null && discontinued != null) {
 			if (!LocalDate.parse(discontinued).isAfter(LocalDate.parse(introduced))) {
-				errors.put(CHAMP_DISCONTINUED_DATE, "You must give a discontinued date which is later than introduced's");
+				errors.put(CHAMP_DISCONTINUED_DATE,
+						"You must give a discontinued date which is later than introduced's");
 			}
 		}
 	}
-
-	public String getValeurChamp(HttpServletRequest request, String nomChamp, Map<String, String> errors) {
-	    String valeur = request.getParameter(nomChamp);
-	    if (valeur == null || valeur.trim().length() == 0) {
-	    	if (nomChamp.equals(CHAMP_COMPUTER_NAME)) {
-	    		errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
-	    	}
+	
+	public String verifNull(String champ) {
+	    if (champ == null || champ.trim().length() == 0) {
 	        return null;
 	    } else {
-	        return valeur.trim();
+	        return champ.trim();
 	    }
 	}
 }

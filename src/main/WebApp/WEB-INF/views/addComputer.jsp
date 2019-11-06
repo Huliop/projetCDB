@@ -39,7 +39,7 @@
 		<section id="main">
 			<div class="container">
 				<div class="alert alert-danger">
-					Try again!
+					Try again! ${ errors }
 					<c:set var="s" value="true" />
 				</div>
 			</div>
@@ -73,29 +73,19 @@
 									computer name</span>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									name="introducedDate"
-									value="<c:out value="${ param.introducedDate }" />"
-									placeholder="Ex : 2001-11-23"> <span
-									class="erreur text-danger">${ errors.introducedDate }</span> <span
-									id="erreurIntroduced" class="text-danger"
-									style="display: none;">You must give a date after
-									January 1st 1970 and before January 27th 2038</span>
+								<label for="introduced">Introduced date</label>
+								    <input type="date" class="form-control" id="introduced" name="introducedDate"
+									   value="<c:out value="${ param.introducedDate }" />" placeholder="Ex : 2001-11-23">
+									       <span class="erreur text-danger">${ errors.introducedDate }</span>
+									       <span id="erreurIntroduced" class="text-danger" style="display: none;">You must give a date after January 1st 1970 and before January 27th 2038</span>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									name="discontinuedDate"
-									value="<c:out value="${ param.discontinuedDate }" />"
-									placeholder="Doit être posterieure à celle d'au dessus">
-								<span class="erreur text-danger">${ errors.discontinuedDate }</span>
-								<span id="erreurDiscontinued" class="text-danger"
-									style="display: none;">You must give a discontinued date
-									which is later than introduced's</span> <span
-									id="erreurDiscontinuedFormat" class="text-danger"
-									style="display: none;">You must give a date after
-									January 1st 1970 and before January 27th 2038</span>
+								<label for="discontinued">Discontinued date</label>
+								    <input type="date" class="form-control" id="discontinued" name="discontinuedDate"
+									 value="<c:out value="${ param.discontinuedDate }" />" placeholder="Doit être posterieure à celle d'au dessus">
+										<span class="erreur text-danger">${ errors.discontinuedDate }</span>
+										<span id="erreurDiscontinued" class="text-danger" style="display: none;">You must give a discontinued date which is later than introduced's</span>
+										<span id="erreurDiscontinuedFormat" class="text-danger" style="display: none;">You must give a date after January 1st 1970 and before January 27th 2038</span>
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select

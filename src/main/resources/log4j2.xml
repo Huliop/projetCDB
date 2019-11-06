@@ -6,10 +6,10 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%highlight{[%-5level %d{yyyy-MM-dd HH:mm:ss.SSS}]}{ERROR = red bright light, WARN = yellow bright, DEBUG = cyan bright} [%t] %style{%c{1}}{bright,magenta} - %msg%n" disableAnsi="false"/>
         </Console>
- 
+        
     </Appenders>
     <Loggers>
-        <Root level="warn">
+        <Root level="info">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>
