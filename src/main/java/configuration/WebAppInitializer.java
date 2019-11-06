@@ -14,13 +14,13 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         // Load Spring web application configuration
         AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
-        ac.register(SpringConfiguration.class);
-        ac.refresh();
+        ac.register(WebConfig.class);
+        ac.setServletContext(servletCxt);
 
         // Create and register the DispatcherServlet
         DispatcherServlet servlet = new DispatcherServlet(ac);
         ServletRegistration.Dynamic registration = servletCxt.addServlet("app", servlet);
         registration.setLoadOnStartup(1);
-        registration.addMapping("/index");
+        registration.addMapping("/");
     }
 }

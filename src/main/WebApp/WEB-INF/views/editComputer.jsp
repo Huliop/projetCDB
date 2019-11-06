@@ -6,10 +6,9 @@
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/bootstrap.min.css" />' rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/font-awesome.css" />' rel="stylesheet" media="screen">
+<link href='<c:url value="/resources/css/main.css" />' rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -102,12 +101,11 @@
 			</div>
 		</div>
 	</section>
-
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-	<script src="js/verifFields.js"></script>
+    
+    <script src='<c:url value="/resources/js/jquery.min.js" />'></script>
+    <script src='<c:url value="/resources/js/bootstrap.min.js" />'></script>
+    <script src='<c:url value="/resources/js/verifFields.js" />'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
 </body>
 

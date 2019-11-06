@@ -15,10 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.CompanyDAO;
 
-import configuration.SpringConfiguration;
+import configuration.WebConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {WebConfig.class})
 public class TestCompanyDAO {
 	
 	@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

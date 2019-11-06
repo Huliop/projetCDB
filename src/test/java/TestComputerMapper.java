@@ -18,10 +18,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
-import configuration.SpringConfiguration;
+import configuration.WebConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {WebConfig.class})
 public class TestComputerMapper {
 	
 	@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

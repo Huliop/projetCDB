@@ -15,10 +15,10 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDAO;
 
-import configuration.SpringConfiguration;
+import configuration.WebConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {WebConfig.class})
 public class TestComputerDAO {
 	
 	@Autowired

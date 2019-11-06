@@ -17,11 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
-import configuration.SpringConfiguration;
+import configuration.WebConfig;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {WebConfig.class})
 public class TestCompanyMapper {
 	
 	@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

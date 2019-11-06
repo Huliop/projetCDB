@@ -6,27 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
-@WebServlet("/index")
-public class Index extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	public static final String VUE = "/WEB-INF/views/index.jsp";
-	public static final String ERROR500 = "/WEB-INF/views/500.jsp";
+public class Index {
 	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
@@ -34,34 +29,31 @@ public class Index extends HttpServlet {
 	private ComputerService instanceService;
 	private Integer nbComputers;
 	private Integer nbPages = 0;
-	private Map<String, String> errors;
+	private Map<String, String> errors = new HashMap<String, String>();
 	Page<Computer> myPage = new Page<Computer>();
 
-    public Index() {
-    	super();
-    	errors = new HashMap<String, String>();
-    }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-    	super.init(config);
-    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-    }
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
+	public ModelAndView getIndex(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getParameter("search") != null && request.getParameter("search") != "") {
 			updatePages(request, response, search(request, response, request.getParameter("search")), true);
 		} else {
 			updatePages(request, response, instanceService.get(), false);
 		}
-		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+		return new ModelAndView("index");
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	@RequestMapping(value = "/index", method = RequestMethod.POST)
+	public void postIndex(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		delete(request, response, request.getParameter("selection"));
 	}
+	
+	@RequestMapping("/500")
+	public ModelAndView error500() {
+		return new ModelAndView("500");
+	}
 
-	private void updateNumPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void updateNumPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		if (request.getParameter("numPage") != null) {
 			try {
 				Integer i = Integer.parseInt(request.getParameter("numPage"));
@@ -72,14 +64,16 @@ public class Index extends HttpServlet {
 						System.out.println(e.getMessage());
 					}
 				} else if (i < 0 || i > nbPages + 1) {
-					this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
+					error500();
 				}
 			} catch (NumberFormatException e) {
-				this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
+				error500();
 			}
 		} else {
 			if (nbPages > 0) {
-				double newPage = (myPage.getCurrentPage() + 1) * ((double) (nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1)) / (double) nbPages);
+				double newPage = (myPage.getCurrentPage() + 1)
+						* ((double) (nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1))
+								/ (double) nbPages);
 				myPage.setCurrentPage((int) newPage - 1);
 			} else {
 				myPage.setCurrentPage(0);
@@ -87,21 +81,23 @@ public class Index extends HttpServlet {
 		}
 	}
 
-	private void updateOffset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void updateOffset(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
 			Integer i = Integer.parseInt(request.getParameter("offset"));
 			myPage.setOffset(i);
 
-			double newPage = (myPage.getCurrentPage() + 1) * ((double) (nbComputers / i + (nbComputers % i == 0 ? 0 : 1)) / (double) nbPages);
+			double newPage = (myPage.getCurrentPage() + 1)
+					* ((double) (nbComputers / i + (nbComputers % i == 0 ? 0 : 1)) / (double) nbPages);
 			myPage.setCurrentPage((int) newPage - 1);
 
 		} catch (NumberFormatException e) {
-			this.getServletContext().getRequestDispatcher(ERROR500).forward(request, response);
+			error500();
 		}
 	}
 
-	private void updatePages(HttpServletRequest request, HttpServletResponse response, List<Computer> list, boolean isSearch)
-			throws ServletException, IOException {
+	private void updatePages(HttpServletRequest request, HttpServletResponse response, List<Computer> list,
+			boolean isSearch) throws ServletException, IOException {
 
 		nbComputers = list.size();
 
@@ -112,7 +108,7 @@ public class Index extends HttpServlet {
 		}
 
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
-		
+
 		if (isSearch) {
 			instanceService.get(myPage, SEARCH, request.getParameter("search"), true);
 		} else {
@@ -129,7 +125,8 @@ public class Index extends HttpServlet {
 		request.setAttribute("numPages", numPages);
 	}
 
-	private void delete(HttpServletRequest request, HttpServletResponse response, String param) throws IOException, ServletException {
+	private void delete(HttpServletRequest request, HttpServletResponse response, String param)
+			throws IOException, ServletException {
 		if (param.length() > 0) {
 			String[] lCleanCompSelected = param.split(",");
 			int length = lCleanCompSelected.length;
@@ -140,7 +137,7 @@ public class Index extends HttpServlet {
 				} catch (Exception e) {
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
 					request.setAttribute("errors", errors);
-					doGet(request, response);
+					getIndex(request, response);
 				}
 			}
 
@@ -149,7 +146,7 @@ public class Index extends HttpServlet {
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
 			request.setAttribute("errors", errors);
-			doGet(request, response);
+			getIndex(request, response);
 		}
 	}
 
@@ -159,7 +156,8 @@ public class Index extends HttpServlet {
 				List<Computer> lComputer = instanceService.search(param);
 				return lComputer;
 			} catch (Exception e) {
-				errors.put("errorDeleting", "A problem has occured while searching the matching computers with this pattern.. Try again");
+				errors.put("errorDeleting",
+						"A problem has occured while searching the matching computers with this pattern.. Try again");
 			}
 		}
 		return null;
