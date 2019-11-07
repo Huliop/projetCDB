@@ -6,6 +6,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.exceptions.InvalidDataException;
@@ -16,47 +19,55 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
+import configuration.MainConfig;
+
+@Component
 public class CDB {
 	@Autowired
-	private static ComputerService computerService;
+	private ComputerService computerService;
 	@Autowired
-	private static CompanyService companyService;
+	private CompanyService companyService;
+	
+	private static ApplicationContext ctx;
 
 	static Scanner scan =  new Scanner(System.in);
 
 	public static void main(String[] args) throws InvalidDataException {
 
 		int choice = 0;
+		
+		ctx = new AnnotationConfigApplicationContext(MainConfig.class);
+		CDB main = ctx.getBean(CDB.class);
 
 		while (choice != Actions.EXIT.getCode()) {
-			printMenu();
+			main.printMenu();
 			try {
 				choice = scan.nextInt();
 				try {
 					switch (Actions.fromCode(choice)) {
 					case ADD_COMPUTER:
-						createComputer();
+						main.createComputer();
 						break;
 					case DELETE_COMPUTER:
-						deleteComputer();
+						main.deleteComputer();
 						break;
 					case UPDATE_COMPUTER:
-						updateComputer();
+						main.updateComputer();
 						break;
 					case EXIT:
 						System.exit(0);
 						break;
 					case LIST_ALL_COMPANIES:
-						listAllCompanies();
+						main.listAllCompanies();
 						break;
 					case LIST_ALL_COMPUTERS:
-						listAllComputers();
+						main.listAllComputers();
 						break;
 					case GET_COMPUTER_BY_ID:
-						getComputerById();
+						main.getComputerById();
 						break;
 					case LIST_ALL_COMPUTERS_PAGE:
-						listAllComputersPaginated();
+						main.listAllComputersPaginated();
 						break;
 					default:
 						break;
@@ -71,7 +82,7 @@ public class CDB {
 		}
 	}
 
-	private static void printMenu() {
+	private void printMenu() {
 		System.out.println("Bienvenue sur CDB !");
 		System.out.println("Veuillez faire votre choix dans ce menu :");
 
@@ -80,7 +91,7 @@ public class CDB {
 		});
 	}
 
-	private static void createComputer() throws InvalidDataException {
+	private void createComputer() throws InvalidDataException {
 		Computer newComputer = new Computer.ComputerBuilder().build();
 		for (Field field : Computer.class.getDeclaredFields()) {
 			System.out.println("Veuillez saisir le " + field.getName() + " du computer");
@@ -108,12 +119,12 @@ public class CDB {
 		System.out.println("Ordinateur créé ! " + newComputer.getId());
 	}
 
-	private static void deleteComputer() {
+	private void deleteComputer() {
 		System.out.print("Saisir l'id de l'ordinateur à supprimer : ");
 		computerService.delete(scan.nextInt());
 	}
 
-	private static void updateComputer() throws InvalidDataException {
+	private void updateComputer() throws InvalidDataException {
 		System.out.print("Saisir l'id de l'ordinateur à modifier : ");
 		Computer computerToUpdate = new Computer.ComputerBuilder().build();
 		try {
@@ -138,7 +149,7 @@ public class CDB {
 		computerService.update(computerToUpdate);
 	}
 
-	private static void updateField(Computer computerToUpdate, int fieldToUpdate) {
+	private void updateField(Computer computerToUpdate, int fieldToUpdate) {
 		switch (fieldToUpdate) {
 			case 1:
 				showOldValueAndAskForNew(computerToUpdate.getName());
@@ -166,11 +177,11 @@ public class CDB {
 		System.out.print("Saisir la nouvelle valeur : ");
 	}
 
-	private static void listAllComputers() {
+	private void listAllComputers() {
 		computerService.get().stream().forEach(System.out::println);
 	}
 
-	private static void getComputerById() {
+	private void getComputerById() {
 		System.out.print("Merci de saisir l'id que vous souhaitez rechercher : ");
 		int id = scan.nextInt();
 		try {
@@ -180,7 +191,7 @@ public class CDB {
 		}
 	}
 
-	private static void listAllComputersPaginated()
+	private void listAllComputersPaginated()
 			throws UnsupportedActionException {
 		Page<Computer> page = new Page<Computer>();
 		boolean nextAction = true;
@@ -205,7 +216,7 @@ public class CDB {
 		}
 	}
 
-	private static void listAllCompanies() {
+	private void listAllCompanies() {
 		companyService.get().stream().forEach(System.out::println);
 	}
 }
