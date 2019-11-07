@@ -93,7 +93,7 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-						<th class="editMode" style="width: 60px; height: 22px;"><input
+						<th class="editMode" style="width: 60px; height: 22px; display:none;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
@@ -110,7 +110,7 @@
 				<tbody id="results">
 					<c:forEach var="computer" items="${ requestScope.computers }">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
+							<td class="editMode" style="display:none;"><input type="checkbox" name="cb"
 								class="cb" value='${ computer.id }'></td>
 							<td><a
 								href="<c:url value='/editComputer'><c:param name="idComputer" value="${ computer.id }" /></c:url>"

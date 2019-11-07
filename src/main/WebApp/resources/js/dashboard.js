@@ -1,8 +1,5 @@
 //On load
 $(function() {
-    // Default: hide edit mode
-    $(".editMode").hide();
-    
     // Click on "selectall" box
     $("#selectall").click(function () {
         $('.cb').prop('checked', this.checked);

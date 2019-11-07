@@ -22,8 +22,10 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 404: Page not found. Too bad bitch! <br /><br />
-				${ error }
+				Error 404: Page not found. Too bad bitch! <br />
+				<c:if test="${ error != null || error != '' }">
+					<br />${ error }
+				</c:if>
 			</div>
 		</div>
 	</section>
