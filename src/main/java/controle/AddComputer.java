@@ -1,11 +1,7 @@
 package controle;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +34,7 @@ public class AddComputer {
 	private Map<String, String> errors = new HashMap<String, String>();
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
-	public ModelAndView getAdd(HttpServletRequest request) throws ServletException, IOException {
+	public ModelAndView getAdd() {
 		return new ModelAndView("addComputer", "companies", instanceCompany.get());
 	}
 
@@ -47,7 +43,7 @@ public class AddComputer {
 			@RequestParam(value = "computerName", required = false) String name,
 			@RequestParam(value = "introducedDate", required = false) String intDate,
 			@RequestParam(value = "discontinuedDate", required = false) String disDate,
-			@RequestParam(value = "company", required = false) String cId) throws ServletException, IOException {
+			@RequestParam(value = "company", required = false) String cId) {
 		ComputerDTO computer = instanceValidator.createFromRequest(errors, false, id, name, intDate, disDate, cId);
 
 		if (computer != null) {

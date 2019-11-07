@@ -22,20 +22,10 @@ public class FieldsValidator {
 		introducedDate   = verifNull(introducedDate);
 		discontinuedDate = verifNull(discontinuedDate);
 		companyId        = verifNull(companyId);
-
-		// On vérifie que les dates sont au bon format, puis si elles le sont qu'elles
-		// sont dans le bon ordre
-		verifDate(introducedDate, errors);
-		verifDate(discontinuedDate, errors);
-		if (errors.isEmpty()) {
-			verifOrdreDate(introducedDate, discontinuedDate, errors);
-		}
-
+		
+		verifDates(introducedDate, discontinuedDate, errors);
 		assertNameNotEmpty(computerName, errors);
-
-		if (isEdit) {
-			id = assertIdComputerValid(idComputer, errors);
-		}
+		id = assertIdComputerValid(idComputer, errors, isEdit);
 		
 		if (errors.isEmpty()) {
 			ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder().withName(computerName)
@@ -59,13 +49,15 @@ public class FieldsValidator {
 		}
 	}
 
-	public Integer assertIdComputerValid(String id, Map<String, String> errors) {
-		try {
-			return Integer.valueOf(id);
-		} catch (NumberFormatException e) {
-			errors.put(CHAMP_COMPUTER_ID, "You must give a valid id");
-			return Integer.valueOf(0);
+	public Integer assertIdComputerValid(String id, Map<String, String> errors, boolean isEdit) {
+		if (isEdit) {
+			try {
+				return Integer.valueOf(id);
+			} catch (NumberFormatException e) {
+				errors.put(CHAMP_COMPUTER_ID, "You must give a valid id");
+			}
 		}
+		return Integer.valueOf(0);
 	}
 
 	public void verifDate(String date, Map<String, String> errors) {
@@ -87,11 +79,23 @@ public class FieldsValidator {
 		}
 	}
 	
+	public void verifDates(String introducedDate, String discontinuedDate, Map<String, String> errors) {
+		verifDate(introducedDate, errors);
+		verifDate(discontinuedDate, errors);
+		if (errors.isEmpty()) {
+			verifOrdreDate(introducedDate, discontinuedDate, errors);
+		}
+	}
+	
 	public String verifNull(String champ) {
 	    if (champ == null || champ.trim().length() == 0) {
 	        return null;
 	    } else {
 	        return champ.trim();
 	    }
+	}
+	
+	public void verifNullAll(String idComputer, String computerName, String introducedDate, String discontinuedDate, String companyId) {
+		
 	}
 }

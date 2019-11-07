@@ -1,11 +1,7 @@
 package controle;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,8 +34,7 @@ public class EditComputer {
 	private Map<String, String> errors = new HashMap<String, String>();
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
-	public ModelAndView getEdit(HttpServletRequest request, @RequestParam("idComputer") String id)
-			throws ServletException, IOException {
+	public ModelAndView getEdit(@RequestParam(value = "idComputer") String id) {
 		ModelAndView mv = new ModelAndView("editComputer", "companies", instanceCompany.get());
 		try {
 			Computer myComputer = instanceService.get(Integer.valueOf(id));
@@ -53,11 +48,11 @@ public class EditComputer {
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public ModelAndView postEdit(@RequestParam(value = "idComputer", required = false) String id,
+	public ModelAndView postEdit(@RequestParam(value = "idComputer") String id,
 			@RequestParam(value = "computerName", required = false) String name,
 			@RequestParam(value = "introducedDate", required = false) String intDate,
 			@RequestParam(value = "discontinuedDate", required = false) String disDate,
-			@RequestParam(value = "company", required = false) String cId) throws ServletException, IOException {
+			@RequestParam(value = "company", required = false) String cId) {
 		ComputerDTO computer = instanceValidator.createFromRequest(errors, true, id, name, intDate, disDate, cId);
 
 		if (computer != null) {
@@ -71,7 +66,7 @@ public class EditComputer {
 			}
 		}
 
-		return new ModelAndView("editComputer").addObject("companies", instanceCompany.get()).addObject("errors",
-				errors);
+		return new ModelAndView("editComputer").addObject("companies", instanceCompany.get())
+				.addObject("errors",errors);
 	}
 }

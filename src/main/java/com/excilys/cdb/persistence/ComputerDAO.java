@@ -115,7 +115,7 @@ public class ComputerDAO {
 		try {
 			result = (List<Computer>) jdbcTemplate.query(SEARCH, new Object[] {"%" + pattern + "%", "%" + pattern + "%"}, new ComputerMapper());
 		} catch (DataAccessException e) {
-			System.out.println("Error searching : " + e.getMessage());
+			log.error("Error searching : " + e.getMessage());
 		}
 		return result;
 	}

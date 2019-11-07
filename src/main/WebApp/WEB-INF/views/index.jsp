@@ -130,7 +130,7 @@
 			<ul class="pagination">
 				<li><a
 					href="<c:url value='/index'>
-                                <c:param name="numPage" value='${ requestScope.numPages - 1 }'/>
+                                <c:param name="numPage" value='${ requestScope.numPages - 1 > 1 ? requestScope.numPages - 1 : 1 }'/>
                                 <c:if test="${ param.search != null && param.search != '' }">
                                     <c:param name="search" value="${ param.search }" />
                                 </c:if>
@@ -151,7 +151,7 @@
 				</c:forEach>
 				<li><a
 					href="<c:url value='/index'>
-                              <c:param name="numPage" value='${ requestScope.numPages + 1 }'/>
+                              <c:param name="numPage" value='${ requestScope.numPages + 1 < requestScope.nbPages  ? requestScope.numPages + 1 : requestScope.nbPages }'/>
                               <c:if test="${ param.search != null && param.search != '' }">
                                 <c:param name="search" value="${ param.search }" />
                               </c:if>
