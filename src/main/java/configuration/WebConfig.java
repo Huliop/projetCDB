@@ -34,18 +34,18 @@ public class WebConfig implements WebMvcConfigurer {
 		ds.setPassword(env.getProperty("dataSource.password"));
 		return ds;
 	 }
-    
+
     @Bean
     public ViewResolver viewResolver() {
        InternalResourceViewResolver bean = new InternalResourceViewResolver();
-  
+
        bean.setViewClass(JstlView.class);
        bean.setPrefix("/WEB-INF/views/");
        bean.setSuffix(".jsp");
-  
+
        return bean;
     }
-    
+
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");

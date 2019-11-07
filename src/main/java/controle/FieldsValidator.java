@@ -12,7 +12,6 @@ public class FieldsValidator {
 	private static final String CHAMP_COMPUTER_ID = "id";
 	private static final String CHAMP_COMPUTER_NAME = "computerName";
 	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
-	
 
 	public ComputerDTO createFromRequest(Map<String, String> errors, boolean isEdit, String idComputer,
 			String computerName, String introducedDate, String discontinuedDate, String companyId) {
@@ -22,11 +21,11 @@ public class FieldsValidator {
 		introducedDate   = verifNull(introducedDate);
 		discontinuedDate = verifNull(discontinuedDate);
 		companyId        = verifNull(companyId);
-		
+
 		verifDates(introducedDate, discontinuedDate, errors);
 		assertNameNotEmpty(computerName, errors);
 		id = assertIdComputerValid(idComputer, errors, isEdit);
-		
+
 		if (errors.isEmpty()) {
 			ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder().withName(computerName)
 					.withCompanyId(Integer.valueOf(companyId) != 0 ? Integer.valueOf(companyId) : null)
@@ -78,7 +77,7 @@ public class FieldsValidator {
 			}
 		}
 	}
-	
+
 	public void verifDates(String introducedDate, String discontinuedDate, Map<String, String> errors) {
 		verifDate(introducedDate, errors);
 		verifDate(discontinuedDate, errors);
@@ -86,16 +85,12 @@ public class FieldsValidator {
 			verifOrdreDate(introducedDate, discontinuedDate, errors);
 		}
 	}
-	
+
 	public String verifNull(String champ) {
 	    if (champ == null || champ.trim().length() == 0) {
 	        return null;
 	    } else {
 	        return champ.trim();
 	    }
-	}
-	
-	public void verifNullAll(String idComputer, String computerName, String introducedDate, String discontinuedDate, String companyId) {
-		
 	}
 }

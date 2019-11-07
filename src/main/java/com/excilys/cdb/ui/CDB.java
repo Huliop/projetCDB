@@ -27,7 +27,7 @@ public class CDB {
 	private ComputerService computerService;
 	@Autowired
 	private CompanyService companyService;
-	
+
 	private static ApplicationContext ctx;
 
 	static Scanner scan =  new Scanner(System.in);
@@ -35,7 +35,7 @@ public class CDB {
 	public static void main(String[] args) throws InvalidDataException {
 
 		int choice = 0;
-		
+
 		ctx = new AnnotationConfigApplicationContext(MainConfig.class);
 		CDB main = ctx.getBean(CDB.class);
 

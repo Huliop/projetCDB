@@ -31,7 +31,7 @@ public class ComputerDAO {
 	private final String DELETE = "DELETE FROM computer WHERE id = ?";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-	private static final Logger log = LoggerFactory.getLogger(CompanyDAO.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 	private SimpleJdbcInsert insertComputer;
 
 	@Autowired
@@ -45,9 +45,9 @@ public class ComputerDAO {
 	public Optional<Computer> get(Integer id) {
 		Computer computer = null;
 		try {
-			computer = (Computer) jdbcTemplate.queryForObject(SELECT_BY_ID, new Object [] { id }, new ComputerMapper());
+			computer = (Computer) jdbcTemplate.queryForObject(SELECT_BY_ID, new Object[] {id}, new ComputerMapper());
 		} catch (DataAccessException e) {
-			log.error("Error getting computer by id : " + e.getMessage());
+			LOG.error("Error getting computer by id : " + e.getMessage());
 		}
 		return Optional.ofNullable(computer);
 	}
@@ -57,7 +57,7 @@ public class ComputerDAO {
 		try {
 			result = (List<Computer>) jdbcTemplate.query(SELECT_ALL, new ComputerMapper());
 		} catch (DataAccessException e) {
-			log.error("Error getting all computers : " + e.getMessage());
+			LOG.error("Error getting all computers : " + e.getMessage());
 		}
 		return result;
 	}
@@ -65,7 +65,7 @@ public class ComputerDAO {
 	public void get(Page<Computer> page, String query, String pattern, boolean isSearch) {
 		try {
 			List<Computer> newElements = new ArrayList<>();
-			
+
 			if (isSearch) {
 				newElements = (List<Computer>) jdbcTemplate.query(query + " LIMIT " + page.getFirstLimit() + "," + page.getOffset(), new Object[] {"%" + pattern + "%", "%" + pattern + "%"}, new ComputerMapper());
 			} else {
@@ -73,7 +73,7 @@ public class ComputerDAO {
 			}
 			page.setElements(newElements);
 		} catch (DataAccessException e) {
-			log.error("Error getting computers paginated : " + e.getMessage());
+			LOG.error("Error getting computers paginated : " + e.getMessage());
 		}
 	}
 
@@ -87,17 +87,17 @@ public class ComputerDAO {
 	        Number newId = insertComputer.executeAndReturnKey(parameters);
 	        computer.setId(newId.intValue());
 		} catch (DataAccessException e) {
-			log.error("Error creating computer : " + e.getMessage());
+			LOG.error("Error creating computer : " + e.getMessage());
 			throw new InvalidDataException("Invalid Data");
 		}
 	}
 
 	public void update(Computer computer) throws InvalidDataException {
 		try {
-			Object[] params = { computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany().getId(), computer.getId() };
+			Object[] params = {computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany().getId(), computer.getId()};
 			jdbcTemplate.update(UPDATE, params);
 		} catch (DataAccessException e) {
-			log.error("Error updating computer : " + e.getMessage());
+			LOG.error("Error updating computer : " + e.getMessage());
 			throw new InvalidDataException("Invalid Data");
 		}
 	}
@@ -106,7 +106,7 @@ public class ComputerDAO {
 		try {
 			jdbcTemplate.update(DELETE, computerId);
 		} catch (DataAccessException e) {
-			log.error("Error deleting computer : " + e.getMessage());
+			LOG.error("Error deleting computer : " + e.getMessage());
 		}
 	}
 
@@ -115,7 +115,7 @@ public class ComputerDAO {
 		try {
 			result = (List<Computer>) jdbcTemplate.query(SEARCH, new Object[] {"%" + pattern + "%", "%" + pattern + "%"}, new ComputerMapper());
 		} catch (DataAccessException e) {
-			log.error("Error searching : " + e.getMessage());
+			LOG.error("Error searching : " + e.getMessage());
 		}
 		return result;
 	}

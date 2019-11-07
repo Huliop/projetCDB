@@ -27,7 +27,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 						.build())
 				.build();
 	}
-	
+
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return new Computer.ComputerBuilder().withId(rs.getInt(1))

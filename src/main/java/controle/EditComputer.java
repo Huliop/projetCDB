@@ -67,6 +67,6 @@ public class EditComputer {
 		}
 
 		return new ModelAndView("editComputer").addObject("companies", instanceCompany.get())
-				.addObject("errors",errors);
+				.addObject("errors", errors);
 	}
 }

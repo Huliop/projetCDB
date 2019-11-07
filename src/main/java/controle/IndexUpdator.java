@@ -74,8 +74,11 @@ public class IndexUpdator {
 	public ModelAndView updatePages(String search, boolean isSearch, String numPage, String offset)
 			throws InvalidDataException, InvalidResourceException {
 
-		if (isSearch) nbComputers = search(search).size();
-		else nbComputers = instanceService.get().size();
+		if (isSearch) {
+			nbComputers = search(search).size();
+		} else {
+			nbComputers = instanceService.get().size();
+		}
 
 		updateNumPage(numPage);
 		updateOffset(offset);
@@ -105,7 +108,7 @@ public class IndexUpdator {
 					instanceService.delete(Integer.valueOf(s));
 				} catch (Exception e) {
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
-					return updatePages(search, ( (search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
+					return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
 				}
 			}
 
@@ -113,11 +116,13 @@ public class IndexUpdator {
 
 			ModelAndView mv = new ModelAndView("index").addObject("numPage", nPage)
 					.addObject("length", length);
-			if (search != null) mv.addObject("search", search);
+			if (search != null) {
+				mv.addObject("search", search);
+			}
 			return mv;
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
-			return updatePages(search, ( (search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
+			return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
 		}
 	}
 

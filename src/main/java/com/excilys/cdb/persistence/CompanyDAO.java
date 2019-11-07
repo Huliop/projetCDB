@@ -18,13 +18,13 @@ import com.excilys.cdb.model.Company;
 
 @Repository
 public class CompanyDAO {
-	
+
 	private JdbcTemplate jdbcTemplate;
 
 	private static final String SELECT_ALL = "SELECT id, name FROM company";
 	private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
-	private static final Logger log = LoggerFactory.getLogger(CompanyDAO.class);
-	
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
+
 	@Autowired
 	public CompanyDAO(DataSource ds) {
 		jdbcTemplate = new JdbcTemplate(ds);
@@ -33,9 +33,9 @@ public class CompanyDAO {
 	public Optional<Company> get(Integer id) {
 		Company company = null;
 		try {
-			company = (Company) jdbcTemplate.query(SELECT_BY_ID, new Object[] { id }, new CompanyMapper());
+			company = (Company) jdbcTemplate.query(SELECT_BY_ID, new Object[] {id}, new CompanyMapper());
 		} catch (DataAccessException e) {
-			log.error("Error getting company by id : " + e.getMessage());
+			LOG.error("Error getting company by id : " + e.getMessage());
 		}
 
 		return Optional.of(company);
@@ -46,7 +46,7 @@ public class CompanyDAO {
 		try {
 			result = (List<Company>) jdbcTemplate.query(SELECT_ALL, new CompanyMapper());
 		} catch (DataAccessException e) {
-			log.error("Error getting all companies : " + e.getMessage());
+			LOG.error("Error getting all companies : " + e.getMessage());
 		}
 		return result;
 	}
