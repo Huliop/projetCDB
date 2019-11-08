@@ -13,28 +13,24 @@ public class FieldsValidator {
 	private static final String CHAMP_COMPUTER_NAME = "computerName";
 	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
 
-	public ComputerDTO createFromRequest(Map<String, String> errors, boolean isEdit, String idComputer,
-			String computerName, String introducedDate, String discontinuedDate, String companyId) {
-		Integer id = 0;
-		idComputer       = verifNull(idComputer);
-		computerName     = verifNull(computerName);
-		introducedDate   = verifNull(introducedDate);
-		discontinuedDate = verifNull(discontinuedDate);
-		companyId        = verifNull(companyId);
+	public ComputerDTO validate(Map<String, String> errors, boolean isEdit, ComputerDTO computer) {
+		String name          = verifNull(computer.getName());
+		String introduced    = verifNull(computer.getIntroduced());
+		String discontinued  = verifNull(computer.getDiscontinued());
+		Integer computerId   = computer.getId();
+		Integer companyId    = computer.getCompanyId();
 
-		verifDates(introducedDate, discontinuedDate, errors);
-		assertNameNotEmpty(computerName, errors);
-		id = assertIdComputerValid(idComputer, errors, isEdit);
+		verifDates(introduced, discontinued, errors);
 
 		if (errors.isEmpty()) {
-			ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder().withName(computerName)
-					.withCompanyId(Integer.valueOf(companyId) != 0 ? Integer.valueOf(companyId) : null)
-					.withIntroduced(introducedDate != null ? introducedDate : null)
-					.withDiscontinued(discontinuedDate != null ? discontinuedDate : null).build();
+			ComputerDTO comp = new ComputerDTO.ComputerDTOBuilder().withName(name)
+					.withCompanyId(companyId != null ? companyId : null)
+					.withIntroduced(introduced != null ? introduced : null)
+					.withDiscontinued(discontinued != null ? discontinued : null).build();
 			if (!isEdit) {
 				return comp;
 			} else {
-				comp.setId(id);
+				comp.setId(computerId);
 				return comp;
 			}
 		} else {
@@ -43,7 +39,7 @@ public class FieldsValidator {
 	}
 
 	public void assertNameNotEmpty(String name, Map<String, String> errors) {
-		if (name == null || name == "") {
+		if (name == null) {
 			errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
 		}
 	}

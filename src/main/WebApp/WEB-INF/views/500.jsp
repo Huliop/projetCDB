@@ -25,10 +25,9 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 500: An error has occured! <br />
-				<br />
+				Error 500: An error has occured! 
 				<c:if test="${ error != null || error != '' }">
-					<br />${ error }
+					: ${ error }
                 </c:if>
 			</div>
 		</div>

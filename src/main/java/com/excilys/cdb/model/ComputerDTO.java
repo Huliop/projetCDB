@@ -1,7 +1,10 @@
 package com.excilys.cdb.model;
 
+import javax.validation.constraints.NotEmpty;
+
 public class ComputerDTO {
 	private Integer id;
+	@NotEmpty(message = "You must provide a name")
 	private String name;
 	private String introduced;
 	private String discontinued;

@@ -15,6 +15,7 @@
 		<jstl.version>1.2</jstl.version>
 		<log4j.version>2.11.1</log4j.version>
 		<spring.version>5.2.0.RELEASE</spring.version>
+		<hibernate.version>6.1.0.Final</hibernate.version>
 	</properties>
 
 	<dependencies>
@@ -87,6 +88,12 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 	</dependencies>
 

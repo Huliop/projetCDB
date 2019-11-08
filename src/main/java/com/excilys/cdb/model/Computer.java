@@ -2,8 +2,11 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotEmpty;
+
 public class Computer {
 	private Integer id;
+	@NotEmpty(message = "You must provide a name")
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;

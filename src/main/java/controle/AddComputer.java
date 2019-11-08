@@ -2,16 +2,18 @@ package controle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
@@ -35,22 +37,20 @@ public class AddComputer {
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
 	public ModelAndView getAdd() {
-		return new ModelAndView("addComputer", "companies", instanceCompany.get());
+		return new ModelAndView("addComputer", "companies",
+				instanceCompany.get().stream().collect(Collectors.toMap(Company::getId, Company::getName)))
+						.addObject("computer", new ComputerDTO.ComputerDTOBuilder().build());
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
-	public ModelAndView postAdd(@RequestParam(value = "idComputer", required = false) String id,
-			@RequestParam(value = "computerName", required = false) String name,
-			@RequestParam(value = "introducedDate", required = false) String intDate,
-			@RequestParam(value = "discontinuedDate", required = false) String disDate,
-			@RequestParam(value = "company", required = false) String cId) {
-		ComputerDTO computer = instanceValidator.createFromRequest(errors, false, id, name, intDate, disDate, cId);
-
-		if (computer != null) {
+	public ModelAndView postAdd(@ModelAttribute("computer") ComputerDTO computer) {
+		ComputerDTO newComputer = instanceValidator.validate(errors, false, computer);
+		if (newComputer != null) {
 			try {
-				Computer newComputer = instanceMapper.fromComputerDTO(computer);
-				instanceService.create(newComputer);
+				Computer myComputer = instanceMapper.fromComputerDTO(newComputer);
+				instanceService.create(myComputer);
 				success = true;
+				return getAdd();
 			} catch (InvalidDataException e) {
 				errors.put(CHAMP_INTRODUCED_DATE, e.getMessage());
 			}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,9 +28,9 @@ public class EditComputer {
 	@Autowired
 	private ComputerMapper instanceMapper;
 	@Autowired
-	private FieldsValidator instanceValidator;
-	@Autowired
 	private CompanyService instanceCompany;
+	@Autowired
+	private FieldsValidator instanceValidator;
 
 	private Map<String, String> errors = new HashMap<String, String>();
 
@@ -48,17 +49,12 @@ public class EditComputer {
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public ModelAndView postEdit(@RequestParam(value = "idComputer") String id,
-			@RequestParam(value = "computerName", required = false) String name,
-			@RequestParam(value = "introducedDate", required = false) String intDate,
-			@RequestParam(value = "discontinuedDate", required = false) String disDate,
-			@RequestParam(value = "company", required = false) String cId) {
-		ComputerDTO computer = instanceValidator.createFromRequest(errors, true, id, name, intDate, disDate, cId);
-
-		if (computer != null) {
+	public ModelAndView postEdit(@ModelAttribute("computer") ComputerDTO computer) {
+		ComputerDTO newComputer = instanceValidator.validate(errors, false, computer);
+		if (newComputer != null) {
 			try {
-				Computer newComputer = instanceMapper.fromComputerDTO(computer);
-				instanceService.update(newComputer);
+				Computer myComputer = instanceMapper.fromComputerDTO(newComputer);
+				instanceService.update(myComputer);
 				return new ModelAndView("redirect:/index").addObject("companies", instanceCompany.get())
 						.addObject("success", true).addObject("numPage", 1);
 			} catch (InvalidDataException e) {
@@ -67,6 +63,7 @@ public class EditComputer {
 		}
 
 		return new ModelAndView("editComputer").addObject("companies", instanceCompany.get())
+				.addObject("computer", computer)
 				.addObject("errors", errors);
 	}
 }
