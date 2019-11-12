@@ -27,6 +27,16 @@ public class ComputerMapper implements RowMapper<Computer> {
 						.build())
 				.build();
 	}
+	
+	public ComputerDTO toDTO(Computer computer) {
+		return new ComputerDTO.ComputerDTOBuilder().withId(computer.getId())
+				.withName(computer.getName())
+				.withIntroduced(computer.getIntroduced() != null ? computer.getIntroduced().toString() : null)
+				.withDiscontinued(computer.getDiscontinued() != null ? computer.getDiscontinued().toString() : null)
+				.withCompanyName(computer.getCompany().getName())
+				.withCompanyId(computer.getCompany().getId())
+				.build();
+	}
 
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {

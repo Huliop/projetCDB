@@ -2,6 +2,7 @@ package controle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.excilys.cdb.exceptions.ComputerNotFoundException;
 import com.excilys.cdb.exceptions.InvalidDataException;
 import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
@@ -36,16 +38,16 @@ public class EditComputer {
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
 	public ModelAndView getEdit(@RequestParam(value = "idComputer") String id) {
-		ModelAndView mv = new ModelAndView("editComputer", "companies", instanceCompany.get());
 		try {
 			Computer myComputer = instanceService.get(Integer.valueOf(id));
-			mv.addObject("computer", myComputer);
+			return new ModelAndView("editComputer", "companies",
+					instanceCompany.get().stream().collect(Collectors.toMap(Company::getId, Company::getName)))
+							.addObject("computer", instanceMapper.toDTO(myComputer));
 		} catch (NumberFormatException e) {
 			return new ModelAndView("500", "error", "Id non valide : " + e.getMessage());
 		} catch (ComputerNotFoundException e) {
 			return new ModelAndView("500", "error", "Id non valide : " + e.getMessage());
 		}
-		return mv;
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
@@ -63,7 +65,6 @@ public class EditComputer {
 		}
 
 		return new ModelAndView("editComputer").addObject("companies", instanceCompany.get())
-				.addObject("computer", computer)
-				.addObject("errors", errors);
+				.addObject("computer", computer).addObject("errors", errors);
 	}
 }
