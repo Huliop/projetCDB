@@ -54,7 +54,7 @@ public class TestComputerDAO {
 		Page<Computer> pageToTest = new Page<Computer>();
 		pageToTest.setOffset(5);
 		int offset = pageToTest.getOffset();
-		instanceDAO.get(pageToTest, SELECT_ALL, "", false);
+		instanceDAO.get(pageToTest, SELECT_ALL, false);
 
 		Optional<Computer> computerToTest = Optional.of(new Computer.ComputerBuilder().withId(1).withName("MacBook Pro 15.4 inch").withCompany(new Company.CompanyBuilder().withId(1).withName("Apple Inc.").build()).build());
 

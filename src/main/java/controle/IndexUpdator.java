@@ -26,7 +26,7 @@ public class IndexUpdator {
 	private Integer nbPages = 0;
 	private Map<String, String> errors = new HashMap<String, String>();
 	Page<Computer> myPage = new Page<Computer>();
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(IndexUpdator.class);
 
 	private void updateNumPage(String numPage) throws InvalidDataException, InvalidResourceException {
@@ -110,7 +110,6 @@ public class IndexUpdator {
 				try {
 					instanceService.delete(Integer.valueOf(s));
 				} catch (Exception e) {
-					LOG.error("1");
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
 					return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage,
 							offset).addObject("errors", errors);
@@ -119,18 +118,15 @@ public class IndexUpdator {
 
 			// int nPage = (myPage.getElements().size() != length ? myPage.getCurrentPage()
 			// + 1 : myPage.getCurrentPage());
-			
+
 			if (search != null && search.trim().length() > 0) {
-				LOG.error("2");
 				return updatePages(search, true, numPage, offset).addObject("length", length)
 						.addObject("successDelete", true).addObject("search", search);
 			}
-			LOG.error("3");
 			return updatePages(search, false, numPage, offset).addObject("length", length).addObject("successDelete",
 					true);
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
-			LOG.error("4");
 			return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset)
 					.addObject("errors", errors);
 		}

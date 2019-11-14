@@ -85,7 +85,7 @@ public class WebConfig implements WebMvcConfigurer {
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(getConnection());
-		sessionFactory.setPackagesToScan(new String[] { "com.excilys.cdb.model" });
+		sessionFactory.setPackagesToScan(new String[] {"com.excilys.cdb.model"});
 		sessionFactory.setHibernateProperties(hibernateProperties());
 
 		return sessionFactory;

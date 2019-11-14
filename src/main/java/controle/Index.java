@@ -50,6 +50,6 @@ public class Index {
 
 	@RequestMapping("/*")
 	public ModelAndView error404(String message) {
-		return new ModelAndView("404", "error", ( message != null && message.trim().length() > 0 ? message : "Don't try me.. Qui fait le malin tombe dans la ravin!"));
+		return new ModelAndView("404", "error", (message != null && message.trim().length() > 0 ? message : "Don't try me.. Qui fait le malin tombe dans la ravin!"));
 	}
 }

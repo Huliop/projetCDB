@@ -44,9 +44,9 @@ public class AddComputer {
 
 	@PostMapping("/addComputer")
 	public ModelAndView postAdd(@ModelAttribute("computer") ComputerDTO computer) {
-		
+
 		ComputerDTO newComputer = instanceValidator.validate(errors, false, computer);
-		
+
 		if (newComputer != null) {
 			try {
 				Computer myComputer = instanceMapper.fromComputerDTO(newComputer);
@@ -58,7 +58,7 @@ public class AddComputer {
 		} else {
 			success = false;
 		}
-		
+
 		return new ModelAndView("addComputer").addObject("companies", instanceCompany.get())
 				.addObject("success", success).addObject("errors", errors);
 	}
