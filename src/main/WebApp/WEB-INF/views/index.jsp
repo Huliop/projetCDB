@@ -37,25 +37,25 @@
 		</div>
 	</header>
 
-	<c:if test='${ param.success == "true" }'>
+	<c:if test='${ success == "true" }'>
 		<section id="main">
 			<div class="container">
 				<div class="alert alert-success">
-					${ successEditing } />
+					${ successEditing }
 				</div>
 			</div>
 		</section>
 	</c:if>
-	<c:if test='${ param.successDelete == "true" }'>
+	<c:if test='${ successDelete == "true" }'>
 		<section id="main">
 			<div class="container">
 				<div class="alert alert-success">
 					<c:choose>
-						<c:when test='${ param.length <= 1 }'>
-                            ${ param.length } ${ successDeletingSolo }
+						<c:when test='${ length <= 1 }'>
+                            ${ length } ${ successDeletingSolo }
 						</c:when>
 						<c:otherwise>
-                            ${ param.length } ${ successDeleting }
+                            ${ length } ${ successDeleting }
 						</c:otherwise>
 					</c:choose>
 				</div>

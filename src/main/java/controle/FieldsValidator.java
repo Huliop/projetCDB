@@ -3,6 +3,8 @@ package controle;
 import java.time.LocalDate;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.ComputerDTO;
@@ -12,6 +14,7 @@ public class FieldsValidator {
 	private static final String CHAMP_COMPUTER_ID = "id";
 	private static final String CHAMP_COMPUTER_NAME = "computerName";
 	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
+	private static final Logger LOG = LoggerFactory.getLogger(FieldsValidator.class);
 
 	public ComputerDTO validate(Map<String, String> errors, boolean isEdit, ComputerDTO computer) {
 		String name          = verifNull(computer.getName());
@@ -20,6 +23,8 @@ public class FieldsValidator {
 		Integer computerId   = computer.getId();
 		Integer companyId    = computer.getCompanyId();
 
+		assertIdComputerValid(computerId, errors, isEdit);
+		assertNameNotEmpty(name, errors);
 		verifDates(introduced, discontinued, errors);
 
 		if (errors.isEmpty()) {
@@ -44,15 +49,10 @@ public class FieldsValidator {
 		}
 	}
 
-	public Integer assertIdComputerValid(String id, Map<String, String> errors, boolean isEdit) {
-		if (isEdit) {
-			try {
-				return Integer.valueOf(id);
-			} catch (NumberFormatException e) {
-				errors.put(CHAMP_COMPUTER_ID, "You must give a valid id");
-			}
+	public void assertIdComputerValid(Integer id, Map<String, String> errors, boolean isEdit) {
+		if (isEdit && id == 0) {
+			errors.put(CHAMP_COMPUTER_ID, "You must give a valid id");
 		}
-		return Integer.valueOf(0);
 	}
 
 	public void verifDate(String date, Map<String, String> errors) {

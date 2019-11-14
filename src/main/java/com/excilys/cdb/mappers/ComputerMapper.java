@@ -33,8 +33,8 @@ public class ComputerMapper implements RowMapper<Computer> {
 				.withName(computer.getName())
 				.withIntroduced(computer.getIntroduced() != null ? computer.getIntroduced().toString() : null)
 				.withDiscontinued(computer.getDiscontinued() != null ? computer.getDiscontinued().toString() : null)
-				.withCompanyName(computer.getCompany().getName())
-				.withCompanyId(computer.getCompany().getId())
+				.withCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
+				.withCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null)
 				.build();
 	}
 

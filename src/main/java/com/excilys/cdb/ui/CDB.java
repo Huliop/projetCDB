@@ -197,7 +197,7 @@ public class CDB {
 		boolean nextAction = true;
 
 		while (nextAction) {
-			computerService.get(page, "", "", false);
+			computerService.get(page, "", false);
 			page.getElements().stream().forEach(System.out::println);
 			System.out.println("Que souhaitez-vous faire ? (p : précédent, s : suivant, q : quitter");
 			String answer = scan.next();

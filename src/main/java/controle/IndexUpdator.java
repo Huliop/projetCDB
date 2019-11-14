@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,8 +19,6 @@ import com.excilys.cdb.service.ComputerService;
 
 @Component
 public class IndexUpdator {
-	private final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-	private final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
 	@Autowired
 	private ComputerService instanceService;
@@ -26,6 +26,8 @@ public class IndexUpdator {
 	private Integer nbPages = 0;
 	private Map<String, String> errors = new HashMap<String, String>();
 	Page<Computer> myPage = new Page<Computer>();
+	
+	private static final Logger LOG = LoggerFactory.getLogger(IndexUpdator.class);
 
 	private void updateNumPage(String numPage) throws InvalidDataException, InvalidResourceException {
 		if (numPage != null) {
@@ -86,9 +88,9 @@ public class IndexUpdator {
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
 
 		if (isSearch) {
-			instanceService.get(myPage, SEARCH, search, true);
+			instanceService.get(myPage, search, true);
 		} else {
-			instanceService.get(myPage, SELECT_ALL, "", false);
+			instanceService.get(myPage, "", false);
 		}
 
 		List<Computer> computers = myPage.getElements();
@@ -99,7 +101,8 @@ public class IndexUpdator {
 				.addObject("navFooter", navFooter).addObject("numPages", numPages).addObject("nbPages", nbPages);
 	}
 
-	public ModelAndView delete(String param, String search, String numPage, String offset) throws InvalidDataException, InvalidResourceException {
+	public ModelAndView delete(String param, String search, String numPage, String offset)
+			throws InvalidDataException, InvalidResourceException {
 		if (param.length() > 0) {
 			String[] lCleanCompSelected = param.split(",");
 			int length = lCleanCompSelected.length;
@@ -107,22 +110,29 @@ public class IndexUpdator {
 				try {
 					instanceService.delete(Integer.valueOf(s));
 				} catch (Exception e) {
+					LOG.error("1");
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
-					return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
+					return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage,
+							offset).addObject("errors", errors);
 				}
 			}
 
-			int nPage = (myPage.getElements().size() != length ? myPage.getCurrentPage() + 1 : myPage.getCurrentPage());
-
-			ModelAndView mv = new ModelAndView("index").addObject("numPage", nPage)
-					.addObject("length", length);
-			if (search != null) {
-				mv.addObject("search", search);
+			// int nPage = (myPage.getElements().size() != length ? myPage.getCurrentPage()
+			// + 1 : myPage.getCurrentPage());
+			
+			if (search != null && search.trim().length() > 0) {
+				LOG.error("2");
+				return updatePages(search, true, numPage, offset).addObject("length", length)
+						.addObject("successDelete", true).addObject("search", search);
 			}
-			return mv;
+			LOG.error("3");
+			return updatePages(search, false, numPage, offset).addObject("length", length).addObject("successDelete",
+					true);
 		} else {
 			errors.put("errorDeleting", "You've selected no computer(s) to delete");
-			return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset).addObject("errors", errors);
+			LOG.error("4");
+			return updatePages(search, ((search != null && search.trim().length() > 0) ? true : false), numPage, offset)
+					.addObject("errors", errors);
 		}
 	}
 

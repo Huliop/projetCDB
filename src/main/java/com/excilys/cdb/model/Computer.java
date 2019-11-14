@@ -2,14 +2,37 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+@Entity
+@Table(name = "computer")
 public class Computer {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
+
 	@NotEmpty(message = "You must provide a name")
+	@Column(name = "name")
 	private String name;
+
+	@Column(name = "introduced")
 	private LocalDate introduced;
+
+	@Column(name = "discontinued")
 	private LocalDate discontinued;
+
+	@ManyToOne
+	@JoinColumn(name = "company_id")
 	private Company company;
 
 	private Computer() {
@@ -100,8 +123,8 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer [id = " + id + ", name = " + name + ", introduced = " + introduced + ", discontinued = " + discontinued
-				+ ", company = " + company + "]";
+		return "Computer [id = " + id + ", name = " + name + ", introduced = " + introduced + ", discontinued = "
+				+ discontinued + ", company = " + company + "]";
 	}
 
 	@Override

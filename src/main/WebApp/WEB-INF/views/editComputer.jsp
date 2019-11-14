@@ -22,7 +22,7 @@
 		</div>
 	</header>
 
-	<c:if test="${ !empty requestScope.errors }">
+	<c:if test="${ !empty errors }">
 		<section id="main">
 			<div class="container">
 				<div class="alert alert-danger">Try again!</div>

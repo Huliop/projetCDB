@@ -2,8 +2,9 @@ package controle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,7 +17,7 @@ public class Index {
 	@Autowired
 	private IndexUpdator instanceUpdator;
 
-	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
+	@GetMapping(value = { "/index", "/" })
 	public ModelAndView getIndex(@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "numPage", required = false) String numPage,
 			@RequestParam(value = "offset", required = false) String offset) {
@@ -34,7 +35,7 @@ public class Index {
 		}
 	}
 
-	@RequestMapping(value = "/index", method = RequestMethod.POST)
+	@PostMapping("/index")
 	public ModelAndView postIndex(@RequestParam(value = "selection", required = false) String selection,
 			@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "numPage", required = false) String numPage,

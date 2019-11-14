@@ -4,49 +4,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.sql.DataSource;
+import javax.persistence.TypedQuery;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
 @Repository
 public class CompanyDAO {
 
-	private JdbcTemplate jdbcTemplate;
-
-	private static final String SELECT_ALL = "SELECT id, name FROM company";
-	private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
+	private static final String SELECT_ALL = "from Company";
+	private static final String SELECT_BY_ID = SELECT_ALL + " where id = ?";
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 
 	@Autowired
-	public CompanyDAO(DataSource ds) {
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
+	SessionFactory sessionFactory;
+
+	public CompanyDAO() {
+	};
 
 	public Optional<Company> get(Integer id) {
+
 		Company company = null;
+		Session session = sessionFactory.openSession();
+
 		try {
-			company = (Company) jdbcTemplate.query(SELECT_BY_ID, new Object[] {id}, new CompanyMapper());
-		} catch (DataAccessException e) {
+			TypedQuery<Company> query = session.createQuery(SELECT_BY_ID, Company.class).setParameter(0, id);
+			List<Company> list = query.getResultList();
+			company = list.get(0);
+		} catch (Exception e) {
 			LOG.error("Error getting company by id : " + e.getMessage());
+		} finally {
+			session.close();
 		}
 
 		return Optional.of(company);
 	}
 
 	public List<Company> get() {
+
 		List<Company> result = new ArrayList<>();
+		Session session = sessionFactory.openSession();
+
 		try {
-			result = (List<Company>) jdbcTemplate.query(SELECT_ALL, new CompanyMapper());
-		} catch (DataAccessException e) {
+			TypedQuery<Company> query = session.createQuery(SELECT_ALL, Company.class);
+			result = query.getResultList();
+		} catch (Exception e) {
 			LOG.error("Error getting all companies : " + e.getMessage());
+		} finally {
+			session.close();
 		}
 		return result;
 	}

@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +26,7 @@ import com.excilys.cdb.service.ComputerService;
 @Controller
 public class EditComputer {
 	private static final String CHAMP_INTRODUCED_DATE = "introducedDate";
+	private static final Logger LOG = LoggerFactory.getLogger(EditComputer.class);
 
 	@Autowired
 	private ComputerService instanceService;
@@ -36,8 +39,8 @@ public class EditComputer {
 
 	private Map<String, String> errors = new HashMap<String, String>();
 
-	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
-	public ModelAndView getEdit(@RequestParam(value = "idComputer") String id) {
+	@GetMapping("/editComputer")
+	public ModelAndView getEdit(@RequestParam(value = "idComputer", required = false) String id) {
 		try {
 			Computer myComputer = instanceService.get(Integer.valueOf(id));
 			return new ModelAndView("editComputer", "companies",
@@ -50,9 +53,9 @@ public class EditComputer {
 		}
 	}
 
-	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public ModelAndView postEdit(@ModelAttribute("computer") ComputerDTO computer) {
-		ComputerDTO newComputer = instanceValidator.validate(errors, false, computer);
+	@PostMapping("/editComputer")
+	public ModelAndView postEdit(@ModelAttribute("computer") ComputerDTO computer) throws ComputerNotFoundException {
+		ComputerDTO newComputer = instanceValidator.validate(errors, true, computer);
 		if (newComputer != null) {
 			try {
 				Computer myComputer = instanceMapper.fromComputerDTO(newComputer);

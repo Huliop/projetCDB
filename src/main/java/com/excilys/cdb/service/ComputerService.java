@@ -15,7 +15,7 @@ public class ComputerService {
 
 	private final ComputerDAO computerDao;
 
-	private ComputerService(ComputerDAO computerDAO) {
+	public ComputerService(ComputerDAO computerDAO) {
 		this.computerDao = computerDAO;
 	}
 
@@ -27,8 +27,8 @@ public class ComputerService {
 		return computerDao.get();
 	}
 
-	public void get(Page<Computer> page, String query, String pattern, boolean isSearch) {
-		computerDao.get(page, query, pattern, isSearch);
+	public void get(Page<Computer> page, String pattern, boolean isSearch) {
+		computerDao.get(page, pattern, isSearch);
 	}
 
 	public void create(Computer computer) throws InvalidDataException {

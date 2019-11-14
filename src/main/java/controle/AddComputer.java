@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.exceptions.InvalidDataException;
@@ -35,29 +35,30 @@ public class AddComputer {
 	private boolean success;
 	private Map<String, String> errors = new HashMap<String, String>();
 
-	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
+	@GetMapping("/addComputer")
 	public ModelAndView getAdd() {
 		return new ModelAndView("addComputer", "companies",
 				instanceCompany.get().stream().collect(Collectors.toMap(Company::getId, Company::getName)))
 						.addObject("computer", new ComputerDTO.ComputerDTOBuilder().build());
 	}
 
-	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
+	@PostMapping("/addComputer")
 	public ModelAndView postAdd(@ModelAttribute("computer") ComputerDTO computer) {
+		
 		ComputerDTO newComputer = instanceValidator.validate(errors, false, computer);
+		
 		if (newComputer != null) {
 			try {
 				Computer myComputer = instanceMapper.fromComputerDTO(newComputer);
 				instanceService.create(myComputer);
-				success = true;
-				return getAdd();
+				return getAdd().addObject("success", true);
 			} catch (InvalidDataException e) {
 				errors.put(CHAMP_INTRODUCED_DATE, e.getMessage());
 			}
 		} else {
 			success = false;
 		}
-
+		
 		return new ModelAndView("addComputer").addObject("companies", instanceCompany.get())
 				.addObject("success", success).addObject("errors", errors);
 	}
