@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.TypedQuery;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -19,7 +17,7 @@ import core.model.Company;
 public class CompanyDAO {
 
 	private static final String SELECT_ALL = "from Company";
-	private static final String SELECT_BY_ID = SELECT_ALL + " where id = ?";
+	private static final String SELECT_BY_ID = SELECT_ALL + " where id = ?0";
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 
 	SessionFactory sessionFactory;
@@ -35,9 +33,7 @@ public class CompanyDAO {
 		Session session = sessionFactory.openSession();
 
 		try {
-			TypedQuery<Company> query = session.createQuery(SELECT_BY_ID, Company.class).setParameter(0, id);
-			List<Company> list = query.getResultList();
-			company = list.get(0);
+			company = session.createQuery(SELECT_BY_ID, Company.class).setParameter(0, id).getResultList().get(0);
 		} catch (Exception e) {
 			LOG.error("Error getting company by id : " + e.getMessage());
 		} finally {
@@ -53,8 +49,7 @@ public class CompanyDAO {
 		Session session = sessionFactory.openSession();
 
 		try {
-			TypedQuery<Company> query = session.createQuery(SELECT_ALL, Company.class);
-			result = query.getResultList();
+			result = session.createQuery(SELECT_ALL, Company.class).getResultList();
 		} catch (Exception e) {
 			LOG.error("Error getting all companies : " + e.getMessage());
 		} finally {

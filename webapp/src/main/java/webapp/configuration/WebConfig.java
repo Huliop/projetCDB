@@ -33,7 +33,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "binding", "service", "persistence", "webapp", "core.model" })
+@ComponentScan(basePackages = { "binding", "service", "persistence", "webapp.controllers", "core.model" })
 @PropertySource({ "classpath:application.properties" })
 public class WebConfig implements WebMvcConfigurer {
 
@@ -81,7 +81,6 @@ public class WebConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	@Autowired
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(getConnection());

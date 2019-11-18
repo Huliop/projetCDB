@@ -3,8 +3,6 @@ package webapp.controllers.utils;
 import java.time.LocalDate;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import core.model.ComputerDTO;
@@ -14,7 +12,6 @@ public class FieldsValidator {
 	private static final String CHAMP_COMPUTER_ID = "id";
 	private static final String CHAMP_COMPUTER_NAME = "computerName";
 	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
-	private static final Logger LOG = LoggerFactory.getLogger(FieldsValidator.class);
 
 	public ComputerDTO validate(Map<String, String> errors, boolean isEdit, ComputerDTO computer) {
 		String name          = verifNull(computer.getName());

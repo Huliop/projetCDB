@@ -89,10 +89,16 @@ public class ComputerDAO {
 	public void create(Computer computer) throws InvalidDataException {
 
 		Session session = sessionFactory.openSession();
+		Transaction tx = null;
 
 		try {
-			session.save(computer);
+			tx = session.beginTransaction();
+			session.persist(computer);
+			tx.commit();
 		} catch (Exception e) {
+			if (tx != null) {
+				tx.rollback();
+			}
 			LOG.error("Error creating computer : " + e.getMessage());
 			throw new InvalidDataException("Invalid Data");
 		} finally {
@@ -107,13 +113,6 @@ public class ComputerDAO {
 
 		try {
 			tx = session.beginTransaction();
-			/*
-			 * session.createQuery(UPDATE).setParameter(0,
-			 * computer.getName()).setParameter(1, computer.getIntroduced())
-			 * .setParameter(2, computer.getDiscontinued()).setParameter(3,
-			 * computer.getCompany().getId()) .setParameter(4,
-			 * computer.getId()).executeUpdate();
-			 */
 			session.update(computer);
 			tx.commit();
 		} catch (Exception e) {

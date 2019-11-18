@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +25,6 @@ import webapp.controllers.utils.FieldsValidator;
 @Controller
 public class EditComputer {
 	private static final String CHAMP_INTRODUCED_DATE = "introducedDate";
-	private static final Logger LOG = LoggerFactory.getLogger(EditComputer.class);
 
 	@Autowired
 	private ComputerService instanceService;
