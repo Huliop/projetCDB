@@ -1,11 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.excilys</groupId>
-	<artifactId>appCDB</artifactId>
+
+	<groupId>com.excilys.cdb</groupId>
+	<artifactId>applicationIncroyableDuCul</artifactId>
+	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+
+	<modules>
+		<module>core</module>
+		<module>persistence</module>
+		<module>binding</module>
+		<module>service</module>
+		<module>webapp</module>
+		<module>console</module>
+	</modules>
 
 	<properties>
 		<mysql.version>8.0.13</mysql.version>
@@ -17,6 +28,9 @@
 		<spring.version>5.2.0.RELEASE</spring.version>
 		<hibernateValidator.version>6.1.0.Final</hibernateValidator.version>
 		<hibernate.version>5.4.7.Final</hibernate.version>
+		
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<downloadSources>true</downloadSources>
 	</properties>
 
 	<dependencies>
@@ -137,13 +151,13 @@
 					<release>11</release>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.1</version>
-				<configuration>
-					<warSourceDirectory>WebContent</warSourceDirectory>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<artifactId>maven-war-plugin</artifactId> -->
+<!-- 				<version>3.2.1</version> -->
+<!-- 				<configuration> -->
+<!-- 					<warSourceDirectory>WebContent</warSourceDirectory> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
