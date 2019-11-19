@@ -18,12 +18,16 @@ import service.ComputerService;
 @Component
 public class IndexUpdator {
 
-	@Autowired
 	private ComputerService instanceService;
 	private Integer nbComputers;
 	private Integer nbPages = 0;
 	private Map<String, String> errors = new HashMap<String, String>();
 	Page<Computer> myPage = new Page<Computer>();
+
+	@Autowired
+	public IndexUpdator(ComputerService instanceService) {
+		this.instanceService = instanceService;
+	}
 
 	private void updateNumPage(String numPage) throws InvalidDataException, InvalidResourceException {
 		if (numPage != null) {

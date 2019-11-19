@@ -24,17 +24,22 @@ import webapp.controllers.utils.FieldsValidator;
 public class AddComputer {
 	private static final String CHAMP_INTRODUCED_DATE = "introducedDate";
 
-	@Autowired
 	private CompanyService instanceCompany;
-	@Autowired
 	private ComputerService instanceService;
-	@Autowired
 	private ComputerMapper instanceMapper;
-	@Autowired
 	private FieldsValidator instanceValidator;
 
 	private boolean success;
 	private Map<String, String> errors = new HashMap<String, String>();
+
+	@Autowired
+	public AddComputer(CompanyService companyService, ComputerService computerService, ComputerMapper computerMapper,
+			FieldsValidator fieldsValidator) {
+		instanceCompany = companyService;
+		instanceService = computerService;
+		instanceMapper = computerMapper;
+		instanceValidator = fieldsValidator;
+	}
 
 	@GetMapping("/addComputer")
 	public ModelAndView getAdd() {

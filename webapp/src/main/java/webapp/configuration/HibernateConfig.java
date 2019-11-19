@@ -1,35 +1,30 @@
-package console;
+package webapp.configuration;
 
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = { "service", "persistence", "console" })
-@PropertySource(value = "classpath:application.properties")
-public class MainConfig {
+@EnableTransactionManagement
+@PropertySource({ "classpath:application.properties" })
+@ComponentScan(basePackages = { "binding", "service", "persistence", "webapp", "core.model" })
+public class HibernateConfig {
 
 	@Autowired
 	private Environment env;
-
-	@Bean
-	public DataSource getConnection() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.user"));
-		dataSource.setPassword(env.getProperty("jdbc.password"));
-		return dataSource;
-	}
 
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
@@ -39,6 +34,31 @@ public class MainConfig {
 		sessionFactory.setHibernateProperties(hibernateProperties());
 
 		return sessionFactory;
+	}
+
+	@Bean
+	public DataSource getConnection() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setDriverClassName(env.getProperty("jdbc.driverClassName"));
+		ds.setUrl(env.getProperty("jdbc.url"));
+		ds.setUsername(env.getProperty("jdbc.user"));
+		ds.setPassword(env.getProperty("jdbc.password"));
+		return ds;
+	}
+
+	@Bean
+	@Autowired
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+
+		HibernateTransactionManager txManager = new HibernateTransactionManager();
+		txManager.setSessionFactory(sessionFactory);
+
+		return txManager;
+	}
+
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		return new PersistenceExceptionTranslationPostProcessor();
 	}
 
 	Properties hibernateProperties() {

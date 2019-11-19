@@ -26,16 +26,21 @@ import webapp.controllers.utils.FieldsValidator;
 public class EditComputer {
 	private static final String CHAMP_INTRODUCED_DATE = "introducedDate";
 
-	@Autowired
-	private ComputerService instanceService;
-	@Autowired
-	private ComputerMapper instanceMapper;
-	@Autowired
 	private CompanyService instanceCompany;
-	@Autowired
+	private ComputerService instanceService;
+	private ComputerMapper instanceMapper;
 	private FieldsValidator instanceValidator;
 
 	private Map<String, String> errors = new HashMap<String, String>();
+
+	@Autowired
+	public EditComputer(CompanyService companyService, ComputerService computerService, ComputerMapper computerMapper,
+			FieldsValidator fieldsValidator) {
+		instanceCompany = companyService;
+		instanceService = computerService;
+		instanceMapper = computerMapper;
+		instanceValidator = fieldsValidator;
+	}
 
 	@GetMapping("/editComputer")
 	public ModelAndView getEdit(@RequestParam(value = "idComputer", required = false) String id) {
