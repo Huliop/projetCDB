@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Configuration
-@ComponentScan(basePackages = { "service", "persistence", "console" })
+@ComponentScan(basePackages = { "service", "persistence", "console", "mapper" })
 @PropertySource(value = "classpath:application.properties")
 public class MainConfig {
 
