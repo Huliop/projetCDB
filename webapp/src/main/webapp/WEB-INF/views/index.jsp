@@ -3,19 +3,20 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page isELIgnored="false"%>
 
-<spring:message code="index.applicationName" var="applicationName"/>
-<spring:message code="index.successEditing" var="successEditing"/>
-<spring:message code="index.successDeletingSolo" var="successDeletingSolo"/>
-<spring:message code="index.successDeleting" var="successDeleting"/>
-<spring:message code="index.computersFound" var="computersFound"/>
-<spring:message code="index.searchPlaceholder" var="searchPlaceholder"/>
-<spring:message code="index.filterValue" var="filterValue"/>
-<spring:message code="index.addComputer" var="addComputer"/>
-<spring:message code="index.delete" var="delete"/>
-<spring:message code="index.compName" var="compName"/>
-<spring:message code="index.intDate" var="intDate"/>
-<spring:message code="index.disDate" var="disDate"/>
-<spring:message code="index.companyField" var="companyField"/>
+<spring:message code="index.applicationName" var="applicationName" />
+<spring:message code="index.successEditing" var="successEditing" />
+<spring:message code="index.successDeletingSolo"
+	var="successDeletingSolo" />
+<spring:message code="index.successDeleting" var="successDeleting" />
+<spring:message code="index.computersFound" var="computersFound" />
+<spring:message code="index.searchPlaceholder" var="searchPlaceholder" />
+<spring:message code="index.filterValue" var="filterValue" />
+<spring:message code="index.addComputer" var="addComputer" />
+<spring:message code="index.delete" var="delete" />
+<spring:message code="index.compName" var="compName" />
+<spring:message code="index.intDate" var="intDate" />
+<spring:message code="index.disDate" var="disDate" />
+<spring:message code="index.companyField" var="companyField" />
 
 <html>
 <head>
@@ -40,9 +41,7 @@
 	<c:if test='${ success == "true" }'>
 		<section id="main">
 			<div class="container">
-				<div class="alert alert-success">
-					${ successEditing }
-				</div>
+				<div class="alert alert-success">${ successEditing }</div>
 			</div>
 		</section>
 	</c:if>
@@ -73,7 +72,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${ nbComputers } ${ computersFound }</h1>
+			<h1 id="homeTitle">${ nbComputers }${ computersFound }</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -96,7 +95,8 @@
 					<a class="btn btn-success" id="addComputer"
 						href="<c:url value='/addComputer' />">${ addComputer }</a> <a
 						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">${ delete }</a>
+						onclick="$.fn.toggleEditMode();">${ delete }</a> <a
+						class="btn btn-default" href="<c:url value='/swagger-ui.html' />">Swagger</a>
 				</div>
 			</div>
 		</div>
