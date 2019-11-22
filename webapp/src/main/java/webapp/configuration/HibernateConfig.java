@@ -15,6 +15,7 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -30,7 +31,7 @@ public class HibernateConfig {
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(getConnection());
-		sessionFactory.setPackagesToScan(new String[] {"core.model"});
+		sessionFactory.setPackagesToScan(new String[] { "core.model" });
 		sessionFactory.setHibernateProperties(hibernateProperties());
 
 		return sessionFactory;
@@ -48,10 +49,10 @@ public class HibernateConfig {
 
 	@Bean
 	@Autowired
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+	public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
 
 		HibernateTransactionManager txManager = new HibernateTransactionManager();
-		txManager.setSessionFactory(sessionFactory);
+		txManager.setSessionFactory(sessionFactory().getObject());
 
 		return txManager;
 	}

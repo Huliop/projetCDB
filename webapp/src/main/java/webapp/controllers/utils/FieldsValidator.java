@@ -3,6 +3,8 @@ package webapp.controllers.utils;
 import java.time.LocalDate;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import core.model.ComputerDTO;
@@ -14,14 +16,14 @@ public class FieldsValidator {
 	private static final String CHAMP_DISCONTINUED_DATE = "discontinuedDate";
 
 	public ComputerDTO validate(Map<String, String> errors, boolean isEdit, ComputerDTO computer) {
-		String name          = verifNull(computer.getName());
-		String introduced    = verifNull(computer.getIntroduced());
-		String discontinued  = verifNull(computer.getDiscontinued());
-		Integer computerId   = computer.getId();
-		Integer companyId    = computer.getCompanyId();
+		String name = verifNull(computer.getName());
+		String introduced = verifNull(computer.getIntroduced());
+		String discontinued = verifNull(computer.getDiscontinued());
+		Integer computerId = computer.getId();
+		Integer companyId = computer.getCompanyId();
 
 		assertIdComputerValid(computerId, errors, isEdit);
-		assertNameNotEmpty(name, errors);
+		assertNameNotEmpty(name, errors, isEdit);
 		verifDates(introduced, discontinued, errors);
 
 		if (errors.isEmpty()) {
@@ -40,8 +42,8 @@ public class FieldsValidator {
 		}
 	}
 
-	public void assertNameNotEmpty(String name, Map<String, String> errors) {
-		if (name == null) {
+	public void assertNameNotEmpty(String name, Map<String, String> errors, boolean isEdit) {
+		if (!isEdit && name == null) {
 			errors.put(CHAMP_COMPUTER_NAME, "You must give a computer name");
 		}
 	}
@@ -74,16 +76,17 @@ public class FieldsValidator {
 	public void verifDates(String introducedDate, String discontinuedDate, Map<String, String> errors) {
 		verifDate(introducedDate, errors);
 		verifDate(discontinuedDate, errors);
+
 		if (errors.isEmpty()) {
 			verifOrdreDate(introducedDate, discontinuedDate, errors);
 		}
 	}
 
 	public String verifNull(String champ) {
-	    if (champ == null || champ.trim().length() == 0) {
-	        return null;
-	    } else {
-	        return champ.trim();
-	    }
+		if (champ == null || champ.trim().length() == 0) {
+			return null;
+		} else {
+			return champ.trim();
+		}
 	}
 }

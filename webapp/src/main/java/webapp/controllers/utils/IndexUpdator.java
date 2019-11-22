@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import core.exceptions.InvalidDataException;
 import core.exceptions.InvalidResourceException;
 import core.model.Computer;
+import core.model.ComputerDTO;
 import core.model.Page;
 import service.ComputerService;
 
@@ -23,6 +26,8 @@ public class IndexUpdator {
 	private Integer nbPages = 0;
 	private Map<String, String> errors = new HashMap<String, String>();
 	Page<Computer> myPage = new Page<Computer>();
+	
+	private static final Logger LOG = LoggerFactory.getLogger(IndexUpdator.class);
 
 	@Autowired
 	public IndexUpdator(ComputerService instanceService) {
@@ -88,9 +93,9 @@ public class IndexUpdator {
 		nbPages = nbComputers / myPage.getOffset() + (nbComputers % myPage.getOffset() == 0 ? 0 : 1);
 
 		if (isSearch) {
-			instanceService.get(myPage, search, true);
+			instanceService.get(myPage, search);
 		} else {
-			instanceService.get(myPage, "", false);
+			instanceService.get(myPage, "");
 		}
 
 		List<Computer> computers = myPage.getElements();
@@ -104,10 +109,12 @@ public class IndexUpdator {
 	public ModelAndView delete(String param, String search, String numPage, String offset)
 			throws InvalidDataException, InvalidResourceException {
 		if (param.length() > 0) {
+			LOG.error("here");
 			String[] lCleanCompSelected = param.split(",");
 			int length = lCleanCompSelected.length;
 			for (String s : lCleanCompSelected) {
 				try {
+					LOG.error("sex");
 					instanceService.delete(Integer.valueOf(s));
 				} catch (Exception e) {
 					errors.put("errorDeleting", "A problem has occured while deleting the computers.. Try Again");
@@ -132,10 +139,10 @@ public class IndexUpdator {
 		}
 	}
 
-	public List<Computer> search(String param) {
+	public List<ComputerDTO> search(String param) {
 		if (param.length() > 0) {
 			try {
-				List<Computer> lComputer = instanceService.search(param);
+				List<ComputerDTO> lComputer = instanceService.search(param);
 				return lComputer;
 			} catch (Exception e) {
 				errors.put("errorDeleting",

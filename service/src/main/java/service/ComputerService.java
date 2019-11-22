@@ -1,59 +1,79 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import core.exceptions.ComputerNotFoundException;
 import core.exceptions.InvalidDataException;
 import core.model.Computer;
+import core.model.ComputerDTO;
 import core.model.Page;
 import persistence.ComputerDAO;
+import binding.ComputerMapper;
 
 @Service
 public class ComputerService {
 
 	private final ComputerDAO computerDao;
+	private final ComputerMapper instanceMapper;
 
-	public ComputerService(ComputerDAO computerDAO) {
+	public ComputerService(ComputerDAO computerDAO, ComputerMapper computerMapper) {
 		this.computerDao = computerDAO;
+		this.instanceMapper = computerMapper;
 	}
 
-	public Computer get(Integer id) throws ComputerNotFoundException {
-		return computerDao.get(id).orElseThrow(() -> new ComputerNotFoundException());
+	@Transactional
+	public ComputerDTO get(Integer id) throws ComputerNotFoundException {
+		return instanceMapper.toDTO(computerDao.get(id).orElseThrow(() -> new ComputerNotFoundException()));
 	}
 
-	public List<Computer> get() {
-		return computerDao.get();
+	@Transactional
+	public List<ComputerDTO> get() {
+
+		List<ComputerDTO> result = new ArrayList<ComputerDTO>();
+		computerDao.get().stream().forEach(c -> result.add(instanceMapper.toDTO(c)));
+
+		return result;
 	}
 
-	public void get(Page<Computer> page, String pattern, boolean isSearch) {
-		computerDao.get(page, pattern, isSearch);
+	@Transactional
+	public List<ComputerDTO> get(Page<Computer> page, String pattern) {
+
+		List<ComputerDTO> result = new ArrayList<ComputerDTO>();
+		computerDao.get(page, pattern);
+
+		page.getElements().stream().forEach(c -> result.add(instanceMapper.toDTO(c)));
+
+		return result;
 	}
 
-	public void create(Computer computer) throws InvalidDataException {
-		try {
-			computerDao.create(computer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InvalidDataException("You must give a valid date");
-		}
+	@Transactional
+	public void create(ComputerDTO computer) throws InvalidDataException {
+
+		computerDao.create(instanceMapper.fromComputerDTO(computer));
 	}
 
-	public void update(Computer computer) throws InvalidDataException {
-		try {
-			computerDao.update(computer);
-		} catch (InvalidDataException e) {
-			e.printStackTrace();
-			throw new InvalidDataException("You must give a valid date");
-		}
+	@Transactional
+	public void update(ComputerDTO computer) throws InvalidDataException {
+
+		computerDao.update(instanceMapper.fromComputerDTO(computer));
 	}
 
-	public List<Computer> search(String pattern) {
-		return computerDao.search(pattern);
+	@Transactional
+	public List<ComputerDTO> search(String pattern) {
+
+		List<ComputerDTO> result = new ArrayList<ComputerDTO>();
+		computerDao.search(pattern).stream().forEach(c -> result.add(instanceMapper.toDTO(c)));
+
+		return result;
 	}
 
-	public void delete(int computerId) {
+	@Transactional
+	public void delete(Integer computerId) {
 		computerDao.delete(computerId);
 	}
 }

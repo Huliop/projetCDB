@@ -1,7 +1,6 @@
 package console;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Component;
 import core.exceptions.ComputerNotFoundException;
 import core.exceptions.InvalidDataException;
 import core.exceptions.UnsupportedActionException;
-import core.model.Company;
 import core.model.Computer;
+import core.model.ComputerDTO;
 import core.model.Page;
 import service.CompanyService;
 import service.ComputerService;
@@ -90,8 +89,8 @@ public class CDB {
 	}
 
 	private void createComputer() throws InvalidDataException {
-		Computer newComputer = new Computer.ComputerBuilder().build();
-		for (Field field : Computer.class.getDeclaredFields()) {
+		ComputerDTO newComputer = new ComputerDTO.ComputerDTOBuilder().build();
+		for (Field field : ComputerDTO.class.getDeclaredFields()) {
 			System.out.println("Veuillez saisir le " + field.getName() + " du computer");
 			switch (field.getName()) {
 				case "id":
@@ -100,13 +99,13 @@ public class CDB {
 					newComputer.setName(scan.next());
 					break;
 				case "introduced":
-					newComputer.setIntroduced(scan.nextLine().trim() != null ? LocalDate.parse(scan.next()) : null);
+					newComputer.setIntroduced(scan.nextLine().trim() != null ? scan.next() : null);
 					break;
 				case "discontinued":
-					newComputer.setDiscontinued(scan.next() != null ? LocalDate.parse(scan.next()) : null);
+					newComputer.setDiscontinued(scan.nextLine().trim() != null ? scan.next() : null);
 					break;
-				case "company":
-					newComputer.setCompany(new Company.CompanyBuilder().withId(scan.nextInt()).build());
+				case "companyId":
+					newComputer.setCompanyId(scan.nextInt());
 					break;
 				default:
 					System.out.println("Attribut inconnu : " + field.getName());
@@ -124,7 +123,7 @@ public class CDB {
 
 	private void updateComputer() throws InvalidDataException {
 		System.out.print("Saisir l'id de l'ordinateur à modifier : ");
-		Computer computerToUpdate = new Computer.ComputerBuilder().build();
+		ComputerDTO computerToUpdate = new ComputerDTO.ComputerDTOBuilder().build();
 		try {
 			computerToUpdate = computerService.get(scan.nextInt());
 		} catch (ComputerNotFoundException e) {
@@ -147,7 +146,7 @@ public class CDB {
 		computerService.update(computerToUpdate);
 	}
 
-	private void updateField(Computer computerToUpdate, int fieldToUpdate) {
+	private void updateField(ComputerDTO computerToUpdate, int fieldToUpdate) {
 		switch (fieldToUpdate) {
 			case 1:
 				showOldValueAndAskForNew(computerToUpdate.getName());
@@ -155,15 +154,15 @@ public class CDB {
 				break;
 			case 2:
 				showOldValueAndAskForNew(computerToUpdate.getIntroduced().toString());
-				computerToUpdate.setIntroduced(LocalDate.parse(scan.next()));
+				computerToUpdate.setIntroduced(scan.next());
 				break;
 			case 3:
 				showOldValueAndAskForNew(computerToUpdate.getDiscontinued().toString());
-				computerToUpdate.setDiscontinued(LocalDate.parse(scan.next()));
+				computerToUpdate.setDiscontinued(scan.next());
 				break;
 			case 4:
-				showOldValueAndAskForNew(computerToUpdate.getCompany().getId().toString());
-				computerToUpdate.setCompany(companyService.get(scan.nextInt()).get());
+				showOldValueAndAskForNew(computerToUpdate.getCompanyId().toString());
+				computerToUpdate.setCompanyId(scan.nextInt());
 				break;
 			default:
 				System.out.println("Champs inconnu");
@@ -195,7 +194,7 @@ public class CDB {
 		boolean nextAction = true;
 
 		while (nextAction) {
-			computerService.get(page, "", false);
+			computerService.get(page, "");
 			page.getElements().stream().forEach(System.out::println);
 			System.out.println("Que souhaitez-vous faire ? (p : précédent, s : suivant, q : quitter");
 			String answer = scan.next();

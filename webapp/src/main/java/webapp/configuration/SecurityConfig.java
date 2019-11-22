@@ -27,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.addFilter(digestFilter(userDetailsService)).exceptionHandling()
-				.authenticationEntryPoint(digestEntryPoint()).and().authorizeRequests().anyRequest().authenticated();
+				.authenticationEntryPoint(digestEntryPoint()).and().authorizeRequests().anyRequest().authenticated()
+				.and().csrf().disable();
 	}
 
 	DigestAuthenticationFilter digestFilter(UserDetailsService userDetailsService) {

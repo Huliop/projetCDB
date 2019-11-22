@@ -22,8 +22,8 @@ public class ComputerMapper implements RowMapper<Computer> {
 				.withIntroduced(computer.getIntroduced() != null ? LocalDate.parse(computer.getIntroduced()) : null)
 				.withDiscontinued(
 						computer.getDiscontinued() != null ? LocalDate.parse(computer.getDiscontinued()) : null)
-				.withCompany(new Company.CompanyBuilder().withId(computer.getCompanyId())
-						.withName(computer.getCompanyName()).build())
+				.withCompany(computer.getCompanyId() != null ? new Company.CompanyBuilder().withId(computer.getCompanyId())
+						.withName(computer.getCompanyName()).build() : null)
 				.build();
 	}
 

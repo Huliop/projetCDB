@@ -2,6 +2,9 @@ package core.model;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({ "id", "name", "introduced", "discontinued", "companyId", "companyName" })
 public class ComputerDTO {
 	private Integer id;
 	@NotEmpty(message = "You must provide a name")

@@ -36,8 +36,6 @@ public class CompanyDAO {
 			company = session.createQuery(SELECT_BY_ID, Company.class).setParameter(0, id).getResultList().get(0);
 		} catch (Exception e) {
 			LOG.error("Error getting company by id : " + e.getMessage());
-		} finally {
-			session.close();
 		}
 
 		return Optional.of(company);
@@ -52,9 +50,8 @@ public class CompanyDAO {
 			result = session.createQuery(SELECT_ALL, Company.class).getResultList();
 		} catch (Exception e) {
 			LOG.error("Error getting all companies : " + e.getMessage());
-		} finally {
-			session.close();
 		}
+
 		return result;
 	}
 
