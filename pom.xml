@@ -26,7 +26,7 @@
 		<jstl.version>                1.2            </jstl.version>
 		<log4j.version>               2.11.1         </log4j.version>
 		<spring.version>              5.2.0.RELEASE  </spring.version>
-		<hibernateValidator.version>  6.1.0.Final    </hibernateValidator.version>
+		<hibernateValidator.version>6.1.5.Final</hibernateValidator.version>
 		<hibernate.version>           5.4.7.Final    </hibernate.version>
 		<tomcat.version>              7.0.55         </tomcat.version>
 		<jboss.version>               3.4.1.Final    </jboss.version>
